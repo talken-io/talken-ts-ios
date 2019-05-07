@@ -1,0 +1,4 @@
+module LibTrustSigner [system] {
+	header "include/trustsigner.h"
+	export *
+}

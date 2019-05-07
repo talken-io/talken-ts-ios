@@ -1,0 +1,182 @@
+1) create file tools/build/src/user-config.jam
+# ------------------
+# darwin iphone configuration.
+# ------------------
+
+local XCODE_ROOT = /Applications/Xcode.app/Contents/Developer ;
+# xcrun --sdk iphoneos --show-sdk-path
+local IPHONESDK = iPhoneOS.sdk ;
+# xcrun --sdk iphonesimulator --show-sdk-path
+local IPHONESIMULATORSDK = iPhoneSimulator.sdk ;
+
+using darwin : armv7
+:
+$(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
+:
+<striper>$(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip
+<root>$(XCODE_ROOT)/Platforms/iPhoneOS.platform/Developer/SDKs/$(IPHONESDK)
+<compileflags>"-isysroot $(XCODE_ROOT)/Platforms/iPhoneOS.platform/Developer/SDKs/$(IPHONESDK)"
+<compileflags>"-arch armv7"
+<compileflags>-fexceptions
+<compileflags>-frtti
+<compileflags>-fpic
+<compileflags>-DBOOST_SP_USE_SPINLOCK
+<compileflags>-std=c++11
+<compileflags>-stdlib=libc++
+<compileflags>-miphoneos-version-min=7.0
+<compileflags>-fvisibility=hidden
+<compileflags>-fvisibility-inlines-hidden
+<compileflags>-O2
+<compileflags>-g
+<compileflags>-Os
+<compileflags>-Wno-long-long
+<compileflags>-Wno-missing-field-initializers
+<compileflags>-Wno-unused-variable
+<linkflags>-stdlib=libc++
+<architecture>arm
+<address-model>32
+<target-os>iphone
+;
+
+using darwin : armv7s
+:
+$(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
+:
+<striper>$(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip
+<root>$(XCODE_ROOT)/Platforms/iPhoneOS.platform/Developer/SDKs/$(IPHONESDK)
+<compileflags>"-isysroot $(XCODE_ROOT)/Platforms/iPhoneOS.platform/Developer/SDKs/$(IPHONESDK)"
+<compileflags>"-arch armv7s"
+<compileflags>-fexceptions
+<compileflags>-frtti
+<compileflags>-fpic
+<compileflags>-DBOOST_SP_USE_SPINLOCK
+<compileflags>-std=c++11
+<compileflags>-stdlib=libc++
+<compileflags>-miphoneos-version-min=7.0
+<compileflags>-fvisibility=hidden
+<compileflags>-fvisibility-inlines-hidden
+<compileflags>-O2
+<compileflags>-g
+<compileflags>-Os
+<compileflags>-Wno-long-long
+<compileflags>-Wno-missing-field-initializers
+<compileflags>-Wno-unused-variable
+<linkflags>-stdlib=libc++
+<architecture>arm
+<address-model>32
+<target-os>iphone
+;
+
+using darwin : arm64
+:
+$(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
+:
+<striper>$(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip
+<root>$(XCODE_ROOT)/Platforms/iPhoneOS.platform/Developer/SDKs/$(IPHONESDK)
+<compileflags>"-isysroot $(XCODE_ROOT)/Platforms/iPhoneOS.platform/Developer/SDKs/$(IPHONESDK)"
+<compileflags>"-arch arm64"
+<compileflags>-fexceptions
+<compileflags>-frtti
+<compileflags>-fpic
+<compileflags>-DBOOST_SP_USE_SPINLOCK
+<compileflags>-std=c++11
+<compileflags>-stdlib=libc++
+<compileflags>-miphoneos-version-min=7.0
+<compileflags>-fvisibility=hidden
+<compileflags>-fvisibility-inlines-hidden
+<compileflags>-O2
+<compileflags>-g
+<compileflags>-Os
+<compileflags>-Wno-long-long
+<compileflags>-Wno-missing-field-initializers
+<compileflags>-Wno-unused-variable
+<linkflags>-stdlib=libc++
+<architecture>arm
+<address-model>64
+<target-os>iphone
+;
+
+
+using darwin : i386
+:
+$(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
+:
+<striper>$(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip
+<root>$(XCODE_ROOT)/Platforms/iPhoneSimulator.platform/Developer/SDKs/$(IPHONESIMULATORSDK)
+<compileflags>"-arch i386"
+<compileflags>"-isysroot $(XCODE_ROOT)/Platforms/iPhoneSimulator.platform/Developer/SDKs/$(IPHONESIMULATORSDK)"
+<compileflags>-fexceptions
+<compileflags>-frtti
+<compileflags>-fpic
+<compileflags>-DBOOST_SP_USE_SPINLOCK
+<compileflags>-std=c++11
+<compileflags>-stdlib=libc++
+<compileflags>-miphoneos-version-min=7.0
+<compileflags>-fvisibility=hidden
+<compileflags>-fvisibility-inlines-hidden
+<compileflags>-O2
+<compileflags>-g
+<compileflags>-Os
+<compileflags>-Wno-long-long
+<compileflags>-Wno-missing-field-initializers
+<compileflags>-Wno-unused-variable
+<linkflags>-stdlib=libc++
+<architecture>x86
+<address-model>32
+<target-os>iphone
+;
+
+using darwin : x86_64
+:
+$(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
+:
+<striper>$(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip
+<root>$(XCODE_ROOT)/Platforms/iPhoneSimulator.platform/Developer/SDKs/$(IPHONESIMULATORSDK)
+<compileflags>"-arch x86_64"
+<compileflags>"-isysroot $(XCODE_ROOT)/Platforms/iPhoneSimulator.platform/Developer/SDKs/$(IPHONESIMULATORSDK)"
+<compileflags>-fexceptions
+<compileflags>-frtti
+<compileflags>-fpic
+<compileflags>-DBOOST_SP_USE_SPINLOCK
+<compileflags>-std=c++11
+<compileflags>-stdlib=libc++
+<compileflags>-miphoneos-version-min=7.0
+<compileflags>-fvisibility=hidden
+<compileflags>-fvisibility-inlines-hidden
+<compileflags>-O2
+<compileflags>-g
+<compileflags>-Os
+<compileflags>-Wno-long-long
+<compileflags>-Wno-missing-field-initializers
+<compileflags>-Wno-unused-variable
+<linkflags>-stdlib=libc++
+<architecture>x86
+<address-model>64
+<target-os>iphone
+;
+
+
+2) patch tools/build/src/tools/darwin.jam
+#change from
+case arm :
+{
+	if $(instruction-set) {
+		options = -arch$(_)$(instruction-set) ;
+	} else {
+		options = -arch arm ;
+	}
+}
+#to
+case arm :
+{
+	if $(instruction-set) {
+		options = -arch$(_)$(instruction-set) ;
+	} else if $(address-model) = 64 {
+		options = -arch arm64 ;
+	} else {
+		options = -arch arm ;
+	}
+}
+
+
+3) copy build script build.sh

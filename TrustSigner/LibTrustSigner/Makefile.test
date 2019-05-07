@@ -1,0 +1,126 @@
+# myseo
+
+PROJECT_NAME = trustsigner
+
+BIP32_BIP39_SOURCE_FILE = \
+	coin.c \
+	bip32_bip39/bignum.c \
+	bip32_bip39/ecdsa.c \
+	bip32_bip39/curves.c \
+	bip32_bip39/secp256k1.c \
+	bip32_bip39/nist256p1.c \
+	bip32_bip39/rand.c \
+	bip32_bip39/hmac.c \
+	bip32_bip39/bip32.c \
+	bip32_bip39/bip39.c \
+	bip32_bip39/bip32_bip39.c \
+	bip32_bip39/pbkdf2.c \
+	bip32_bip39/base58.c \
+	bip32_bip39/base32.c \
+	bip32_bip39/address.c \
+	bip32_bip39/script.c \
+	bip32_bip39/ripemd160.c \
+	bip32_bip39/sha2.c \
+	bip32_bip39/sha3.c \
+	bip32_bip39/hasher.c \
+	bip32_bip39/aes/aescrypt.c \
+	bip32_bip39/aes/aeskey.c \
+	bip32_bip39/aes/aestab.c \
+	bip32_bip39/aes/aes_modes.c \
+	bip32_bip39/ed25519-donna/curve25519-donna-32bit.c \
+	bip32_bip39/ed25519-donna/curve25519-donna-helpers.c \
+	bip32_bip39/ed25519-donna/modm-donna-32bit.c \
+	bip32_bip39/ed25519-donna/ed25519-donna-impl-base.c \
+	bip32_bip39/ed25519-donna/ed25519-donna-basepoint-table.c \
+	bip32_bip39/ed25519-donna/ed25519-donna-32bit-tables.c \
+	bip32_bip39/ed25519-donna/curve25519-donna-scalarmult-base.c \
+	bip32_bip39/ed25519-donna/ed25519.c \
+	bip32_bip39/ed25519-donna/ed25519-sha3.c \
+	bip32_bip39/blake256.c \
+	bip32_bip39/blake2b.c \
+	bip32_bip39/blake2s.c \
+	bip32_bip39/groestl.c \
+	bip32_bip39/memzero.c
+
+#	bip32_bip39/nem.c \
+	bip32_bip39/ed25519-donna/ed25519-keccak.c \
+
+WHITEBOX_SOURCE_FILE = \
+	whitebox.cpp \
+	whitebox/base.cpp \
+	whitebox/BGEAttack.cpp \
+	whitebox/GenericAES.cpp \
+	whitebox/LinearAffineEq.cpp \
+	whitebox/md5.cpp \
+	whitebox/MixingBijections.cpp \
+	whitebox/NTLUtils.cpp \
+	whitebox/WBAES.cpp \
+	whitebox/WBAESGenerator.cpp \
+	whitebox/RingBuffer.cpp \
+	whitebox/EncTools.cpp \
+	whitebox/InputObject.cpp \
+	whitebox/InputObjectBuffer.cpp \
+	whitebox/InputObjectIstream.cpp \
+	whitebox/InputObjectOstream.cpp \
+	whitebox/InputObjectIOstream.cpp
+
+TRUSTSIGNER_SOURCE_FILE = \
+	base64.cpp \
+	trustsigner.cpp
+
+STATIC_LIBRARY_FILE = libtrustsigner.a
+SHARED_LIBRARY_FILE = libtrustsigner.so
+
+BIP32_BIP39_OBJECT_FILE += $(BIP32_BIP39_SOURCE_FILE:.c=.o)
+WHITEBOX_OBJECT_FILE += $(WHITEBOX_SOURCE_FILE:.cpp=.o)
+TRUSTSIGNER_OBJECT_FILE += $(TRUSTSIGNER_SOURCE_FILE:.cpp=.o)
+
+LIBRARY_OBJECT_FILE += $(BIP32_BIP39_OBJECT_FILE)
+LIBRARY_OBJECT_FILE += $(WHITEBOX_OBJECT_FILE)
+LIBRARY_OBJECT_FILE += $(TRUSTSIGNER_OBJECT_FILE)
+
+#DEF_OS = __ANDROID__
+DEF_OS = __APPLE__
+#DEF_OS = __LINUX__
+
+DEF_WRITER = __FILES__
+#DEF_WRITER = __MEMORY__
+
+CC = cc
+CXX = c++
+AR = ar
+AS = as
+RANLIB = ranlib
+
+CXXFLAGS = -O3 -g -std=c++11 -fPIC -W -Wall -Wno-unused-parameter -frtti -fexceptions
+CFLAGS = -O3 -g -std=gnu99 -fPIC -W -Wall -Wno-unused-parameter -Wextra -Wimplicit-function-declaration -Wredundant-decls -Wstrict-prototypes -Wundef -Wshadow -Wpointer-arith -Wformat -Wreturn-type -Wsign-compare -Wmultichar -Wformat-nonliteral -Winit-self -Wuninitialized -Wformat-security
+
+CXXFLAGS += -D__WHITEBOX__
+CFLAGS   += -D__WHITEBOX__
+
+CXXFLAGS += -DDEBUG_TRUST_SIGNER -D$(DEF_OS) -D$(DEF_WRITER)
+CFLAGS   += -DDEBUG_TRUST_SIGNER -D$(DEF_OS) -D$(DEF_WRITER)
+
+LDFLAGS  = -L/usr/local/lib
+LDFLAGS += -lntl -lboost_program_options-mt -lboost_serialization-mt -lboost_iostreams-mt -lboost_random-mt -lboost_regex-mt -lboost_system-mt
+
+INC_PATHS  = -I./include -I./whitebox -I./bip32_bip39 -I./bip32_bip39/aes
+INC_PATHS += -I/use/local/include
+
+#all: clean lib test 
+all: lib test 
+
+%.o: %.c
+	$(CC) -c -arch x86_64 $(CFLAGS) $(INC_PATHS) -o $@ $<
+
+%.o: %.cpp
+	$(CXX) -c -arch x86_64 $(CXXFLAGS) $(INC_PATHS) -o $@ $<
+
+lib: $(LIBRARY_OBJECT_FILE)
+	$(CXX) -shared -o $(SHARED_LIBRARY_FILE) $(LIBRARY_OBJECT_FILE) $(LDFLAGS)
+
+test:
+	$(CC) $(CFLAGS) $(INC_PATHS) -L. -l$(PROJECT_NAME) test_main.c -o test
+
+clean:
+	@rm -rf $(LIBRARY_OBJECT_FILE) $(STATIC_LIBRARY_FILE) $(SHARED_LIBRARY_FILE) test *.dSYM *.wbd *.wbr
