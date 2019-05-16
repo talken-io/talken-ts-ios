@@ -48,8 +48,8 @@ class ViewController: UIViewController {
     
     @IBAction func btn_Get_Recovery_Data(_ sender: Any) {
         var recoveryData: String? = nil
-        let userKey: String = "1234567890123456789012345678901234567890123456789012345678901234"
-        let ServerKey: String = "1234567890123456789012345678901234567890123456789012345678901234"
+        let userKey: String = "553da97a442053022ff753cdbb7246aed6f586875ccfa855008dbb3765933f8b7d5ba430ea82dcf113dcc0bb4c3b9e2432525ac043f3e37a18db693e53671cd0"
+        let ServerKey: String = "71db7cb1bcfa049c2878f1cf0c34fd3a3b87d68e8e6c1a7a7971bdf3b00b822a5ad846cca500ced86b94b8c37a3ac879a8994005d89ef30d9ae837344c1725b0"
         
         let mTrustSigner = TrustSigner(appID: "Test")
         
@@ -59,8 +59,8 @@ class ViewController: UIViewController {
     
     @IBAction func btn_Set_Recovery_Data(_ sender: Any) {
         var pubKey: String? = nil;
-        let org_recoveryData: String = "{\"iv\":\"p2gvnNR3Wh/wTZIVXxjJ/Q==\",\"v\":1,\"iter\":1,\"ks\":256,\"ts\":64,\"mode\":\"ccm\",\"adata\":\"\",\"cipher\":\"aes\",\"ct\":\"DUDZOVA9MRONiroYi17saHeqL6Io6XHf7bOcSl+KZ7loQgFWyqd5KEai7etFgf/UuMWCVTXb8ln9B6b/EbrLuYYIKvy4MKZg3Og7+mUXYVWifILNFwLB5Acx1cY/2IQ6/+Q/hpgmTrY8KpOzw5fyV0QafwnaxpXFvFoyZgmJIIXSeZpVSdhedpvoWozcJ97TPydQykjBsJW1jTTL9cBsuA==\"}"
-        let userKey: String = "1234567890123456789012345678901234567890123456789012345678901234"
+        let org_recoveryData: String = "{\"iv\":\"p2gvnNR3Wh/wTZIVXxjJ/Q==\",\"v\":1,\"iter\":1,\"ks\":256,\"ts\":64,\"mode\":\"ccm\",\"adata\":\"\",\"cipher\":\"aes\",\"ct\":\"xDqFqIr/0HS2aTNR/S69flmreTGDIukhqc7SVLMTN1Ebe3vImU+uXuCg8WJVyHV7L8/sFc8JiWUl7yyZFbyymHQE7uhzB63Pobe03vaVGAolX0gpUr7vy8Ph92APKa4VjRgbNlcJYr/ax1MHFGlStuPi5/wBSWPmgxNEI6tf2sMkJxRsF4vilif+jv5/x/avkv193J5yiERjdDH03N9rsg==\"}"
+        let userKey: String = "553da97a442053022ff753cdbb7246aed6f586875ccfa855008dbb3765933f8b7d5ba430ea82dcf113dcc0bb4c3b9e2432525ac043f3e37a18db693e53671cd0"
         
         let mTrustSigner = TrustSigner(appID: "Test")
         
@@ -73,8 +73,9 @@ class ViewController: UIViewController {
         print("@@@ TrustSigner : BTC Pub Key = \(String(describing: pubKey))")
         
         print("============ ORG =================================================")
-        print("SEED  : (064) : 99590676129caad71b67de55aabcd7efe3fbaa6e1977774a14e07fe2517a65cebf2a5065a627b362302b8e3e6c325a7aeb19f88a674f5bb89c8ac35cd1b5af52")
-        print("BTC Pub (111) : xpub661MyMwAqRbcFSLeReY1p1mSdbcPf9my7qQzYms2P5gM19kw3ubeuMDRTSesyC7nHf6ugcycbcGThAzzmT34fFvvYRdx5Ki23ia2wJKiMTb")
+        print("Mnemonic : (160) : neither way city bird steak bubble clown enjoy media palm flash give figure consider october display dragon edit razor unfold step traffic salt say")
+        print("SEED     : (064) : d13b1c3c54fef76da1457676cf29341dbc4c6369f0c72dd3a63f32293206891875e153da8f7bc434d68fcb82d07e934c34a9fa427fd4edbafecea5c9da587fe6")
+        print("BTC Pub  : (111) : xpub6C6ChaNuhHShGwtK3wLm67vpa6W6STaKWhdq7RcwuLCVYaBd2oF34dFubxmQaGLyrrLYkQibuS2RMVvjrrxvh16F8AwSdxdMELKUyFmYgeA")
     }
     
 }

@@ -72,6 +72,7 @@ NTL_SOURCE_FILE = \
 	src/G_LLL_QP.c \
 	src/G_LLL_XD.c \
 	src/G_LLL_RR.c \
+	src/GetPID1.c \
 	src/thread.c \
 	src/BasicThreadPool.c
 
@@ -81,21 +82,21 @@ NTL_OBJECT_FILE     += $(NTL_SOURCE_FILE:.c=.o)
 LIBRARY_OBJECT_FILE += $(NTL_OBJECT_FILE)
 
 #armv7 armv7s arm64
-ARCH     ?= armv7
-PLATFORM ?= iPhoneOS
+#ARCH     ?= armv7
+#PLATFORM ?= iPhoneOS
 
-SDKVERSION ?= 12.2
-DEVELOPER  ?= /Applications/Xcode.app/Contents/Developer
-DEVROOT ?= ${DEVELOPER}/Platforms/${PLATFORM}.platform/Developer
-SDKROOT ?= ${DEVROOT}/SDKs/${PLATFORM}${SDKVERSION}.sdk
-BUILD_TOOLS ?= ${DEVELOPER}
+#SDKVERSION ?= 12.2
+#DEVELOPER  ?= /Applications/Xcode.app/Contents/Developer
+#DEVROOT ?= ${DEVELOPER}/Platforms/${PLATFORM}.platform/Developer
+#SDKROOT ?= ${DEVROOT}/SDKs/${PLATFORM}${SDKVERSION}.sdk
+#BUILD_TOOLS ?= ${DEVELOPER}
 
-CXX    ?= xcrun -sdk iphoneos ${BUILD_TOOLS}/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
-AR     ?= xcrun -sdk iphoneos ${BUILD_TOOLS}/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar
-RANLIB ?= xcrun -sdk iphoneos ${BUILD_TOOLS}/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib
+#CXX    ?= xcrun -sdk iphoneos ${BUILD_TOOLS}/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
+#AR     ?= xcrun -sdk iphoneos ${BUILD_TOOLS}/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar
+#RANLIB ?= xcrun -sdk iphoneos ${BUILD_TOOLS}/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib
 
-CXXFLAGS ?= -arch ${ARCH} -isysroot ${SDKROOT}
-LDFLAGS  ?= -arch ${ARCH} -isysroot ${SDKROOT}
+#CXXFLAGS += -arch ${ARCH} -isysroot ${SDKROOT}
+#LDFLAGS  += -arch ${ARCH} -isysroot ${SDKROOT}
 
 CXXFLAGS += -g -O2 -x c++ -fPIC -W -Wall -Wno-unused-parameter -fexceptions -fno-rtti -fno-exceptions -fvisibility=hidden -fstrict-aliasing -Wa,--noexecstack -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums -Bdynamic
 

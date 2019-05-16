@@ -4,11 +4,11 @@
 
 CURRENTPATH=`pwd`
 SDKVERSION=`xcrun -sdk iphoneos --show-sdk-version`
-IOS_MIN_SDK_VERSION="8.0"
+IOS_MIN_SDK_VERSION="10.2"
 DEVELOPER=`xcode-select -print-path`
 #ARCHS="armv7 armv7s arm64 i386 x86_64"
 ARCHS="armv7 armv7s arm64"
-PLATFORM="iPhoneOS"
+#ARCHS="x86_64"
 
 make clean
 rm -rf output
@@ -16,6 +16,20 @@ mkdir output
 
 for ARCH in ${ARCHS}
 do
+	if [[ "${ARCH}" == "i386" || "${ARCH}" == "x86_64" ]];
+	then
+		PLATFORM="iPhoneSimulator"
+	else
+		PLATFORM="iPhoneOS"
+	fi
+
+#	if [[ "${ARCH}" == "arm64" || "${ARCH}" == "x86_64" ]];
+#	then
+#		cp include/NTL/mach_desc.h.64 include/NTL/mach_desc.h
+#	else
+#		cp include/NTL/mach_desc.h.32 include/NTL/mach_desc.h
+#	fi
+
 	echo "Building Library ntl for ${PLATFORM} ${SDKVERSION} ${ARCH}"
 
 	export DEVROOT="${DEVELOPER}/Platforms/${PLATFORM}.platform/Developer"
@@ -26,9 +40,9 @@ do
 	export CXX="xcrun -sdk iphoneos ${BUILD_TOOLS}/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++"
 	export AR="xcrun -sdk iphoneos ${BUILD_TOOLS}/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar"
 	export RANLIB="xcrun -sdk iphoneos ${BUILD_TOOLS}/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib"
-    export CFLAGS="-arch ${ARCH} -pipe -no-cpp-precomp -isysroot ${SDKROOT}"
-    export CXXFLAGS="-arch ${ARCH} -pipe -no-cpp-precomp -isysroot ${SDKROOT}"
-	export LDFLAGS="-arch ${ARCH} -pipe -no-cpp-precomp -isysroot ${SDKROOT}"
+    export CFLAGS="-arch ${ARCH} -pipe -no-cpp-precomp -isysroot ${SDKROOT} -miphoneos-version-min=${IOS_MIN_SDK_VERSION}"
+    export CXXFLAGS="-arch ${ARCH} -pipe -no-cpp-precomp -isysroot ${SDKROOT} -miphoneos-version-min=${IOS_MIN_SDK_VERSION}"
+	export LDFLAGS="-arch ${ARCH} -pipe -no-cpp-precomp -isysroot ${SDKROOT} -miphoneos-version-min=${IOS_MIN_SDK_VERSION}"
 
 	make
 	cp libntl.a output/libntl-${ARCH}.a
@@ -43,8 +57,6 @@ done
 	-create
 #	-arch i386    "output/libntl-i386.a" \
 #	-arch x86_64  "output/libntl-x86_64.a" \
-
-
 
 cd output
 VERSION_TYPE=Alpha

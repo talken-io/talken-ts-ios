@@ -58,7 +58,9 @@
 #include "base64.h"
 
 #if defined(__ANDROID__)
+#ifndef NDEBUG
 #define DEBUG_TRUST_SIGNER 1
+#endif
 #define __FILES__ 1
 #define __WHITEBOX__ 1
 #endif
@@ -987,9 +989,9 @@ unsigned char *TrustSigner_getWBSignatureData(char *app_id, unsigned char *wb_da
 			sign_len += 1; // value v
 #ifdef DEBUG_TRUST_SIGNER
 			LOGD("----------------------------- SIGNATURE ETH --------------------------\n");
-			hex_print (hexbuf, (unsigned char *) hash_message, SIGN_HASH_LENGTH);
+			hex_print (hexbuf, (unsigned char *) hash_message, hash_len);
 			LOGD("HashMessage : %s\n", hexbuf);
-			hex_print (hexbuf, sign_message, SIGN_SIGNATURE_LENGTH+1);
+			hex_print (hexbuf, sign_message, sign_len);
 			LOGD("Signature : %s\n", hexbuf);
 #endif
 			 break;
@@ -1003,7 +1005,7 @@ unsigned char *TrustSigner_getWBSignatureData(char *app_id, unsigned char *wb_da
 			sign_len = SIGN_SIGNATURE_LENGTH;
 #ifdef DEBUG_TRUST_SIGNER
 			LOGD("----------------------------- SIGNATURE XLM --------------------------\n");
-			hex_print (hexbuf, (unsigned char *) hash_message, SIGN_HASH_LENGTH);
+			hex_print (hexbuf, (unsigned char *) hash_message, hash_len);
 			LOGD("HashMessage : %s\n", hexbuf);
 			hex_print (hexbuf, sign_message, (size_t) sign_len);
 			LOGD("Signature : %s\n", hexbuf);
@@ -1346,7 +1348,7 @@ unsigned char *TrustSigner_setWBRecoveryData(char *app_id, char *user_key, char 
 
     recovery_start = (char *) strstr (recovery_data, "ct\":\"");
 	recovery_start += 5;
-    recovery_end = (char *) strstr (recovery_data, "\"}");
+    recovery_end = (char *) strstr (recovery_start, "\"");
 	recovery_length = (int) (recovery_end - recovery_start);
 	strncpy (base64_recovery, recovery_start, (size_t) recovery_length);
 #ifdef DEBUG_TRUST_SIGNER

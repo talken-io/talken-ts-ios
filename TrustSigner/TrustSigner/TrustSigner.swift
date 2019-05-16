@@ -1,16 +1,21 @@
-//
-//  TrustSigner.swift
-//  TrustSigner
-//
-//  Created by Seo Minyeol on 24/04/2019.
-//  Copyright © 2019 Minyeol Seo. All rights reserved.
-//
+/******************************************************************************
+ * TrustSigner Library (BTC,ETH,XLM Keypair/Signature Maker)
+ *
+ * Description : Swift Class Library
+ *
+ * Copyright (C) 2018-2019 NexL Corporation. All rights reserved.
+ * http://www.nexl.kr (myseo@nexl.kr)
+ ******************************************************************************
+ * Edit History
+ * When            Who         What, Where, Why
+ * 2019/05/08      myseo       create.
+ ******************************************************************************/
 
 import Foundation
 import LibTrustSigner
 
 open class TrustSigner {
-    let VERSION: String = "0.9.1"
+    let VERSION: String = "0.9.2"
     let PREFERENCE_WB: String = "trustsigner.wbd"
     
     var mAppID:  String? = nil
@@ -137,10 +142,13 @@ open class TrustSigner {
     
     private func putStringSharedPreference (key: String, value: String) -> Bool {
         return SecureStorage.setSecureUserDefault(key: key, value: value)
+//        UserDefaults.standard.set(value as Any, forKey: key)
+//        return true
     }
     
     private func getStringSharedPreference (key: String) -> String? {
         return SecureStorage.getSecureUserDefault(key: key)
+//        return UserDefaults.standard.object(forKey: key) as? String
     }
     
     public func getVersion () -> String {
@@ -367,10 +375,10 @@ open class TrustSigner {
             print("Error! WB initialize failed.")
             return false
         }
-        SecureStorage.clearSecureStorage()
+//        SecureStorage.clearSecureStorage()
         
         let retLength: Int = getDataLength(array: Array(UnsafeBufferPointer(start: pWbData, count: 4)))
-        mWbData = Array(UnsafeBufferPointer(start: pWbData, count: retLength))
+        mWbData = Array(UnsafeBufferPointer(start: pWbData, count: retLength + 4))
         if (putStringSharedPreference(key: PREFERENCE_WB, value: byteArrayToHexString(byteArray: mWbData!)) == false) {
             print("Error! WB secure save failed.")
             return false
