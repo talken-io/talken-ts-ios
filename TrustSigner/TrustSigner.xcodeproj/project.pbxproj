@@ -980,6 +980,7 @@
 		A532CF5B22703ECA008AB4EE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -989,7 +990,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks/boost/boost_1_69_0/ios-build",
 					"$(PROJECT_DIR)/Frameworks/ntl/output",
 				);
@@ -999,7 +999,11 @@
 					__WHITEBOX__,
 					DEBUG_TRUST_SIGNER,
 					"DEBUG=1",
-					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/LibTrustSigner/include",
+					"$(PROJECT_DIR)/LibTrustSigner/whitebox",
+					"$(PROJECT_DIR)/LibTrustSigner/bip32_bip39/**",
 				);
 				INFOPLIST_FILE = TrustSigner/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1008,6 +1012,33 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"-fPIC",
+					"-W",
+					"-Wall",
+					"-Wextra",
+					"-Wimplicit-function-declaration",
+					"-Wredundant-decls",
+					"-Wstrict-prototypes",
+					"-Wundef",
+					"-Wshadow",
+					"-Wpointer-arith",
+					"-Wformat",
+					"-Wreturn-type",
+					"-Wsign-compare",
+					"-Wmultichar",
+					"-Wformat-nonliteral",
+					"-Winit-self",
+					"-Wuninitialized",
+					"-Wformat-security",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-W",
+					"-Wall",
+					"-frtti",
+					"-fexceptions",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.talken.TrustSigner;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1021,6 +1052,7 @@
 		A532CF5C22703ECA008AB4EE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -1030,7 +1062,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks/boost/boost_1_69_0/ios-build",
 					"$(PROJECT_DIR)/Frameworks/ntl/output",
 				);
@@ -1039,6 +1070,11 @@
 					__FILES__,
 					__WHITEBOX__,
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/LibTrustSigner/include",
+					"$(PROJECT_DIR)/LibTrustSigner/whitebox",
+					"$(PROJECT_DIR)/LibTrustSigner/bip32_bip39/**",
+				);
 				INFOPLIST_FILE = TrustSigner/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -1046,6 +1082,33 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"-fPIC",
+					"-W",
+					"-Wall",
+					"-Wextra",
+					"-Wimplicit-function-declaration",
+					"-Wredundant-decls",
+					"-Wstrict-prototypes",
+					"-Wundef",
+					"-Wshadow",
+					"-Wpointer-arith",
+					"-Wformat",
+					"-Wreturn-type",
+					"-Wsign-compare",
+					"-Wmultichar",
+					"-Wformat-nonliteral",
+					"-Winit-self",
+					"-Wuninitialized",
+					"-Wformat-security",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-W",
+					"-Wall",
+					"-frtti",
+					"-fexceptions",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.talken.TrustSigner;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
