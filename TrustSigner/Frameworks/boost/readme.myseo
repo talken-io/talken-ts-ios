@@ -1,4 +1,7 @@
-1) create file tools/build/src/user-config.jam
+1) uncompress boost library
+tar xvjf boost_1_69_0.tar.bz2
+
+2) create file tools/build/src/user-config.jam
 # ------------------
 # darwin iphone configuration.
 # ------------------
@@ -156,7 +159,7 @@ $(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 ;
 
 
-2) patch tools/build/src/tools/darwin.jam
+3) patch tools/build/src/tools/darwin.jam
 #change from
 case arm :
 {
@@ -179,4 +182,6 @@ case arm :
 }
 
 
-3) copy build script build.sh
+4) copy build script build.sh
+
+5) run build.sh

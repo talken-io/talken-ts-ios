@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ ! -f boost_1_69_0/tools/build/src/user-config.jam ]; then
+	cp ../user-config.jam tools/build/src/user-config.jam
+fi
+if [ ! -f boost_1_69_0/tools/build/src/tools/darwin.jam ]; then
+	cp ../darwin.jam tools/build/src/tools/darwin.jam
+fi
+
 #./bootstrap.sh --with-libraries=atomic,chrono,date_time,exception,filesystem,graph,iostreams,math,program_options,random,regex,serialization,signals,system,test,thread,wave
 ./bootstrap.sh --with-libraries=iostreams,program_options,serialization,random,regex,system
 
