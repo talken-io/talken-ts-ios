@@ -32,18 +32,18 @@ int trust_signer_create_table(char **table)
 	GenericAES defAES;
 	defAES.init(0x11B, 0x03);
 
-	WBAESGenerator generator;
+	WBAESGenerator *generator = new WBAESGenerator;
 	WBAES *genAES = new WBAES;
 
 	ExtEncoding coding;
-	generator.generateExtEncoding(&coding, WBAESGEN_EXTGEN_ID);
+	generator->generateExtEncoding(&coding, WBAESGEN_EXTGEN_ID);
 
 	for(int i=0; i<AES_BYTES; i++){
 		keyFromString[i] = (unsigned char)(phrand() % 0x100);
 	}
 
-	generator.generateTables(keyFromString, KEY_SIZE_16, genAES, &coding, true);
-	generator.generateTables(keyFromString, KEY_SIZE_16, genAES, &coding, false);
+	generator->generateTables(keyFromString, KEY_SIZE_16, genAES, &coding, true);
+	generator->generateTables(keyFromString, KEY_SIZE_16, genAES, &coding, false);
 
 	for(int i=0; i<AES_BYTES; i++){
 		keyFromString[i] = (unsigned char) 0xFF;
@@ -53,8 +53,9 @@ int trust_signer_create_table(char **table)
 
 	outTable = genAES->save();
 	delete genAES;
+    delete generator;
 
-	int length = outTable.length();
+	int length = (int) outTable.length();
 	phrase = (char *) malloc (length + 1);
 	memset (phrase, 0, length + 1);
 	memcpy (phrase, outTable.c_str(), length);
@@ -77,11 +78,11 @@ int trust_signer_encrypt(char *table, int table_length, unsigned char *input, in
 	GenericAES defAES;
 	defAES.init(0x11B, 0x03);
 
-	WBAESGenerator generator;
+	WBAESGenerator *generator = new WBAESGenerator;
 	WBAES *genAES = new WBAES;
 
 	ExtEncoding coding;
-	generator.generateExtEncoding(&coding, WBAESGEN_EXTGEN_ID);
+	generator->generateExtEncoding(&coding, WBAESGEN_EXTGEN_ID);
 
 	std::string inTable(table, table_length);
 
@@ -91,10 +92,12 @@ int trust_signer_encrypt(char *table, int table_length, unsigned char *input, in
 	ioib.write(input, in_length);
 	InputObjectBuffer<BYTE> ioob(in_length*N_BYTES);
 
-	EncTools::processData(!encrypt, genAES, &generator, &ioib, &ioob, &coding, pkcs5Padding, cbc, ivFromString, &cacc, &pacc);
+	EncTools::processData(!encrypt, genAES, generator, &ioib, &ioob, &coding, pkcs5Padding, cbc, ivFromString, &cacc, &pacc);
+    
 	delete genAES;
+    delete generator;
 
-	int length = ioob.getPos();
+	int length = (int) ioob.getPos();
 	ioob.read(output, length);
 
 	ioib.clear();
@@ -114,18 +117,18 @@ int trust_signer_create_table_fp(char *filename)
 	GenericAES defAES;
 	defAES.init(0x11B, 0x09);
 
-	WBAESGenerator generator;
+	WBAESGenerator *generator = new WBAESGenerator;
 	WBAES *genAES = new WBAES;
 
 	ExtEncoding coding;
-	generator.generateExtEncoding(&coding, WBAESGEN_EXTGEN_ID);
+	generator->generateExtEncoding(&coding, WBAESGEN_EXTGEN_ID);
 
 	for(int i=0; i<AES_BYTES; i++){
 		keyFromString[i] = (unsigned char)(phrand() % 0x100);
 	}
 
-	generator.generateTables(keyFromString, KEY_SIZE_16, genAES, &coding, true);
-	generator.generateTables(keyFromString, KEY_SIZE_16, genAES, &coding, false);
+	generator->generateTables(keyFromString, KEY_SIZE_16, genAES, &coding, true);
+	generator->generateTables(keyFromString, KEY_SIZE_16, genAES, &coding, false);
 
 	for(int i=0; i<AES_BYTES; i++){
 		keyFromString[i] = (unsigned char) 0xFF;
@@ -134,7 +137,9 @@ int trust_signer_create_table_fp(char *filename)
 	}
 
 	ret = genAES->save(filename);
+    
 	delete genAES;
+    delete generator;
 
 	return ret;
 }
@@ -153,21 +158,23 @@ int trust_signer_encrypt_fp(char *filename, unsigned char *input, int in_length,
 	GenericAES defAES;
 	defAES.init(0x11B, 0x09);
 
-	WBAESGenerator generator;
+	WBAESGenerator *generator = new WBAESGenerator;
 	WBAES *genAES = new WBAES;
 	genAES->load(filename);
 
 	ExtEncoding coding;
-	generator.generateExtEncoding(&coding, WBAESGEN_EXTGEN_ID);
+	generator->generateExtEncoding(&coding, WBAESGEN_EXTGEN_ID);
 
 	InputObjectBuffer<BYTE> ioib(in_length);
 	ioib.write(input, in_length);
 	InputObjectBuffer<BYTE> ioob(in_length*N_BYTES);
 
-	EncTools::processData(!encrypt, genAES, &generator, &ioib, &ioob, &coding, pkcs5Padding, cbc, ivFromString, &cacc, &pacc);
+	EncTools::processData(!encrypt, genAES, generator, &ioib, &ioob, &coding, pkcs5Padding, cbc, ivFromString, &cacc, &pacc);
+    
 	delete genAES;
+    delete generator;
 
-	int length = ioob.getPos();
+	int length = (int) ioob.getPos();
 	ioob.read(output, length);
 
 	ioib.clear();
