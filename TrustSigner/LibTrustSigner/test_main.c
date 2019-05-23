@@ -113,10 +113,9 @@ int main (void) {
 	if (wb_data != NULL)
 		free (wb_data);
 
-	printf("============ ORG =================================================\n");
-	printf("Mnemonic : (160) : neither way city bird steak bubble clown enjoy media palm flash give figure consider october display dragon edit razor unfold step traffic salt say\n");
-	printf("SEED     : (064) : d13b1c3c54fef76da1457676cf29341dbc4c6369f0c72dd3a63f32293206891875e153da8f7bc434d68fcb82d07e934c34a9fa427fd4edbafecea5c9da587fe6\n");
-	printf("BTC Pub  : (111) : xpub6C6ChaNuhHShGwtK3wLm67vpa6W6STaKWhdq7RcwuLCVYaBd2oF34dFubxmQaGLyrrLYkQibuS2RMVvjrrxvh16F8AwSdxdMELKUyFmYgeA\n");
+	printf ("----------------------------- ORG SEED -------------------------------\n");
+	printf ("neither way city bird steak bubble clown enjoy media palm flash give figure consider october display dragon edit razor unfold step traffic salt say\n");
+	printf ("d13b1c3c54fef76da1457676cf29341dbc4c6369f0c72dd3a63f32293206891875e153da8f7bc434d68fcb82d07e934c34a9fa427fd4edbafecea5c9da587fe6\n");
 
 	return 0;
 }

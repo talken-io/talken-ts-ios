@@ -247,33 +247,12 @@ void WBAES::encdec(W128b& state, bool encrypt){
 	// 3. lvl
 	op8xor_128(ares[0],  ares[4],  edXTabEx[1][12], ares[0]);  // 0 xor 4  --> 0
 	op8xor_128(ares[8],  ares[12], edXTabEx[1][13], ares[8]);  // 8 xor 12 --> 8
-#if 0 // MYSEO
-	for (int i=0; i<4; i++) {
-		for (int j=0; j<16; j++) {
-			cout << "### MYSEO: [" << i << "," << j << "] : " << endl;
-			for (int k=0; k<256; k++) {
-				cout << CHEX(edXTabEx[1][14][i][j][k]) << " ";
-				if (k != 0 && (k+1)%32 == 0) {
-					cout << endl;
-				}
-			}
-			cout << endl;
-		}
-	}
-#endif
-#if 1 // MYSEO
 	// 4. lvl - final stage. Result in ares[0]
 	op8xor_128(ares[0],  ares[8],  edXTabEx[1][14], ares[0]);  // 0 xor 8 --> 0
 	// Copy result from ares[0] to state, transpose, not W128CP(state, ares[0]);
 	for(i=0; i<N_BYTES; i++){
 		state.B[i] = ares[0].B[idxTranspose(i)];
 	}
-#else
-	top8xor_128(ares[0],  ares[8],  edXTabEx[1][14], ares[0]);
-	for(i=0; i<N_BYTES; i++){
-		state.B[i] = ares[0].B[idxTranspose(i)];
-	}
-#endif
 
 #ifdef AES_BGE_ATTACK
 	// If we are performing attack, we modified output bijection for 1 byte from 2 concatenated 4x4 bijections to one 8x8

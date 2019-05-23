@@ -42,7 +42,7 @@ extern "C" {
 
 #define BIP44_VAL_HARDENED			0x80000000
 #define BIP44_VAL_PURPOSE			44
-#if 0 // MAINNET
+#ifdef NDEBUG // MAINNET
 #define BIP44_VAL_BITCOIN			0
 #else // TESTNET
 #define BIP44_VAL_BITCOIN			1
@@ -52,7 +52,7 @@ extern "C" {
 
 #define SIGN_HASH_LENGTH			32
 #define SIGN_SIGNATURE_LENGTH		64
-#define SIGN_SIGNATURE_MAX			5
+#define SIGN_SIGNATURE_MAX			32
 #define SIGN_SIGNATURE_MAX_LENGTH	((SIGN_SIGNATURE_LENGTH+1)*SIGN_SIGNATURE_MAX)
 
 #define MNEMONIC_MAX_LENGTH			1024 // magic number calculated from wordlists

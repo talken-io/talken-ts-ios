@@ -15,7 +15,7 @@ import Foundation
 import LibTrustSigner
 
 open class TrustSigner {
-    let VERSION: String = "0.9.2"
+    let VERSION: String = "1.0.0"
     let PREFERENCE_WB: String = "trustsigner.wbd"
     
     var mAppID:  String? = nil
@@ -30,7 +30,9 @@ open class TrustSigner {
         mAppID = String(appID)
         mWbPath = getApplicationDirectory().path
         if (mAppID == nil || mWbPath == nil) {
-            print("Error! App id or path is NULL!")
+            #if DEBUG
+                print("Error! App id or path is NULL!")
+            #endif
             return
         }
         
@@ -52,10 +54,14 @@ open class TrustSigner {
 
         let strWbData: String! = getStringSharedPreference(key: PREFERENCE_WB);
         if (strWbData == nil) {
-            print("@@@@@@@ TrustSigner WB Table Create @@@@@@@")
+            #if DEBUG
+                print("@@@@@@@ TrustSigner WB Table Create @@@@@@@")
+            #endif
             pWbData = TrustSigner_getWBInitializeData(pAppID, pWbPath);
             if (pWbData == nil) {
-                print("Error! WB initialize failed.")
+                #if DEBUG
+                    print("Error! WB initialize failed.")
+                #endif
                 if (pAppID != nil) {
                     pAppID!.deinitialize(count: mAppID!.count + 1)
                     pAppID?.deallocate()
@@ -74,7 +80,9 @@ open class TrustSigner {
             let retLength: Int = getDataLength(array: Array(UnsafeBufferPointer(start: pWbData, count: 4)))
             mWbData = Array(UnsafeBufferPointer(start: pWbData, count: retLength + 4)) // 68
             if (putStringSharedPreference(key: PREFERENCE_WB, value: byteArrayToHexString(byteArray: mWbData!)) == false) {
-                print("Error! WB secure save failed.")
+                #if DEBUG
+                    print("Error! WB secure save failed.")
+                #endif
                 if (pAppID != nil) {
                     pAppID!.deinitialize(count: mAppID!.count + 1)
                     pAppID?.deallocate()
@@ -91,7 +99,9 @@ open class TrustSigner {
                 return
             }
         } else {
-            print("@@@@@@@ TrustSigner WB Table Load @@@@@@@")
+            #if DEBUG
+                print("@@@@@@@ TrustSigner WB Table Load @@@@@@@")
+            #endif
             mWbData = hexStringToByteArray(hexString: strWbData)
             if (pWbData != nil) {
                 if (pAppID != nil) {
@@ -159,7 +169,9 @@ open class TrustSigner {
         mAppID = String(appID)
         mWbPath = getApplicationDirectory().path
         if (mAppID == nil || mWbPath == nil) {
-            print("Error! App id or path is NULL!")
+            #if DEBUG
+                print("Error! App id or path is NULL!")
+            #endif
             return false
         }
         
@@ -181,7 +193,9 @@ open class TrustSigner {
         
         pWbData = TrustSigner_getWBInitializeData(pAppID, pWbPath);
         if (pWbData == nil) {
-            print("Error! WB initialize failed.")
+            #if DEBUG
+                print("Error! WB initialize failed.")
+            #endif
             if (pAppID != nil) {
                 pAppID!.deinitialize(count: mAppID!.count + 1)
                 pAppID?.deallocate()
@@ -200,7 +214,9 @@ open class TrustSigner {
         let retLength: Int = getDataLength(array: Array(UnsafeBufferPointer(start: pWbData, count: 4)))
         mWbData = Array(UnsafeBufferPointer(start: pWbData, count: retLength + 4)) // 68
         if (putStringSharedPreference(key: PREFERENCE_WB, value: byteArrayToHexString(byteArray: mWbData!)) == false) {
-            print("Error! WB secure save failed.")
+            #if DEBUG
+                print("Error! WB secure save failed.")
+            #endif
             if (pWbData != nil) {
                 if (pAppID != nil) {
                     pAppID!.deinitialize(count: mAppID!.count + 1)
@@ -223,22 +239,34 @@ open class TrustSigner {
     
     public func getPublicKey (coinSymbol: String, hdDepth: Int, hdChange: Int, hdIndex: Int) -> String? {
         if (mAppID == nil) {
-            print("[TrustSigner] : App ID is empty!")
+            #if DEBUG
+                print("[TrustSigner] : App ID is empty!")
+            #endif
             return nil
         } else if (mWbData == nil) {
-            print("[TrustSigner] : WB data is empty!")
+            #if DEBUG
+                print("[TrustSigner] : WB data is empty!")
+            #endif
             return nil
         } else if (hdDepth < 3 || hdDepth > 5) {
-            print("[TrustSigner] : HD depth value invaild! (3 ~ 5)")
+            #if DEBUG
+                print("[TrustSigner] : HD depth value invaild! (3 ~ 5)")
+            #endif
             return nil
         } else if (coinSymbol == "XLM" && hdDepth != 3) {
-            print("[TrustSigner] : XLM HD depth value invaild! (3)")
+            #if DEBUG
+                print("[TrustSigner] : XLM HD depth value invaild! (3)")
+            #endif
             return nil
         } else if (hdChange < 0 || hdChange > 1) {
-            print("[TrustSigner] : HD change value invaild! (0 ~ 1)")
+            #if DEBUG
+                print("[TrustSigner] : HD change value invaild! (0 ~ 1)")
+            #endif
             return nil
         } else if (hdIndex < 0) {
-            print("[TrustSigner] : HD index value invaild!")
+            #if DEBUG
+                print("[TrustSigner] : HD index value invaild!")
+            #endif
             return nil
         }
         
@@ -249,7 +277,9 @@ open class TrustSigner {
         let pubKey: UnsafeMutablePointer<Int8>? = TrustSigner_getWBPublicKey (pAppID, pWbPath, pWbData, coinSym, Int32(hdDepth), Int32(hdChange), Int32(hdIndex))
         coinSym.deallocate()
         if (pubKey == nil) {
-            print("Error! Get public key failed.")
+            #if DEBUG
+                print("Error! Get public key failed.")
+            #endif
             return nil
         }
         
@@ -258,10 +288,14 @@ open class TrustSigner {
     
     public func getAccountPublicKey (coinSymbol: String) -> String? {
         if (mAppID == nil) {
-            print("[TrustSigner] : App ID is empty!")
+            #if DEBUG
+                print("[TrustSigner] : App ID is empty!")
+            #endif
             return nil
         } else if (mWbData == nil) {
-            print("[TrustSigner] : WB data is empty!")
+            #if DEBUG
+                print("[TrustSigner] : WB data is empty!")
+            #endif
             return nil
         }
         
@@ -273,7 +307,9 @@ open class TrustSigner {
         coinSym.deinitialize(count: coinSymbol.count + 1)
         coinSym.deallocate()
         if (pubKey == nil) {
-            print("Error! Get public key failed.")
+            #if DEBUG
+                print("Error! Get public key failed.")
+            #endif
             return nil
         }
         
@@ -282,22 +318,34 @@ open class TrustSigner {
     
     public func getSignatureData (coinSymbol: String, hdDepth: Int, hdChange: Int, hdIndex: Int, hashMessage: String) -> String? {
         if (mAppID == nil) {
-            print("[TrustSigner] : App ID is empty!")
+            #if DEBUG
+                print("[TrustSigner] : App ID is empty!")
+            #endif
             return nil
         } else if (mWbData == nil) {
-            print("[TrustSigner] : WB data is empty!")
+            #if DEBUG
+                print("[TrustSigner] : WB data is empty!")
+            #endif
             return nil
         } else if (hdDepth < 3 || hdDepth > 5) {
-            print("[TrustSigner] : HD depth value invaild! (3 ~ 5)")
+            #if DEBUG
+                print("[TrustSigner] : HD depth value invaild! (3 ~ 5)")
+            #endif
             return nil
         } else if (coinSymbol == "XLM" && hdDepth != 3) {
-            print("[TrustSigner] : XLM HD depth value invaild! (3)")
+            #if DEBUG
+                print("[TrustSigner] : XLM HD depth value invaild! (3)")
+            #endif
             return nil
         } else if (hdChange < 0 || hdChange > 1) {
-            print("[TrustSigner] : HD change value invaild! (0 ~ 1)")
+            #if DEBUG
+                print("[TrustSigner] : HD change value invaild! (0 ~ 1)")
+            #endif
             return nil
         } else if (hdIndex < 0) {
-            print("[TrustSigner] : HD index value invaild!")
+            #if DEBUG
+                print("[TrustSigner] : HD index value invaild!")
+            #endif
             return nil
         }
         
@@ -314,7 +362,9 @@ open class TrustSigner {
         hashMsg.deinitialize(count: hashMessage.count/2 + 1)
         hashMsg.deallocate()
         if (sign == nil) {
-            print("Error! Get signature failed.")
+            #if DEBUG
+                print("Error! Get signature failed.")
+            #endif
             return nil
         }
     
@@ -326,10 +376,14 @@ open class TrustSigner {
     
     public func getRecoveryData (userKey: String, serverKey: String) -> String? {
         if (mAppID == nil) {
-            print("[TrustSigner] : App ID is empty!")
+            #if DEBUG
+                print("[TrustSigner] : App ID is empty!")
+            #endif
             return nil
         } else if (mWbData == nil) {
-            print("[TrustSigner] : WB data is empty!")
+            #if DEBUG
+                print("[TrustSigner] : WB data is empty!")
+            #endif
             return nil
         }
         
@@ -346,7 +400,9 @@ open class TrustSigner {
         srvKey.deinitialize(count: serverKey.count + 1)
         srvKey.deallocate()
         if (recoveryData == nil) {
-            print("Error! Get recovery data failed.")
+            #if DEBUG
+                print("Error! Get recovery data failed.")
+            #endif
             return nil
         }
     
@@ -355,7 +411,9 @@ open class TrustSigner {
     
     public func setRecoveryData (userKey: String, recoveryData: String) -> Bool {
         if (mAppID == nil) {
-            print("[TrustSigner] : App ID is empty!")
+            #if DEBUG
+                print("[TrustSigner] : App ID is empty!")
+            #endif
             return false
         }
         
@@ -372,7 +430,9 @@ open class TrustSigner {
         recoveryDat.deinitialize(count: recoveryData.count + 1)
         recoveryDat.deallocate()
         if (pWbData == nil) {
-            print("Error! WB initialize failed.")
+            #if DEBUG
+                print("Error! WB initialize failed.")
+            #endif
             return false
         }
 //        SecureStorage.clearSecureStorage()
@@ -380,7 +440,9 @@ open class TrustSigner {
         let retLength: Int = getDataLength(array: Array(UnsafeBufferPointer(start: pWbData, count: 4)))
         mWbData = Array(UnsafeBufferPointer(start: pWbData, count: retLength + 4))
         if (putStringSharedPreference(key: PREFERENCE_WB, value: byteArrayToHexString(byteArray: mWbData!)) == false) {
-            print("Error! WB secure save failed.")
+            #if DEBUG
+                print("Error! WB secure save failed.")
+            #endif
             return false
         }
         

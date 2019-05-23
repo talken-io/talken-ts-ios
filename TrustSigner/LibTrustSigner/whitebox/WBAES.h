@@ -223,69 +223,6 @@ inline void op8xor_128(const W128b& o1, const W128b& o2, const W32XTB * xtb, W12
     OP8XOR_128(o1, o2, xtb, res);
 }
 
-#if 1 // MYSEO
-inline void top8xor_128(const W128b& o1, const W128b& o2, const W32XTB * xtb, W128b& res){
-	int of1, of2, of3, of4;
-
-#if 0
-	for (int i=0; i<4; i++) {
-		of1 = (i*4);
-		of2 = (i*4);
-		of3 = 0;
-		of4 = (i*4);
-		res.B[(of4)+0] = OP2HI(OP2HI(o1.B[(of1)+0], o2.B[(of2)+0]) , OP2LO(o1.B[(of1)+0], o2.B[(of2)+0]) );
-		res.B[(of4)+1] = OP2HI(OP2HI(o1.B[(of1)+1], o2.B[(of2)+1]) , OP2LO(o1.B[(of1)+1], o2.B[(of2)+1]) );
-		res.B[(of4)+2] = OP2HI(OP2HI(o1.B[(of1)+2], o2.B[(of2)+2]) , OP2LO(o1.B[(of1)+2], o2.B[(of2)+2]) );
-		res.B[(of4)+3] = OP2HI(OP2HI(o1.B[(of1)+3], o2.B[(of2)+3]) , OP2LO(o1.B[(of1)+3], o2.B[(of2)+3]) );
-	}
-#else
-	of1 = 0;
-	of2 = 0;
-	of3 = 0;
-	of4 = 0;
-    res.B[(of4)+0] = HILO(xtb[0][(of3)+0][OP2HI(o1.B[(of1)+0], o2.B[(of2)+0])] , xtb[0][(of3)+1][OP2LO(o1.B[(of1)+0], o2.B[(of2)+0])] );
-    res.B[(of4)+1] = HILO(xtb[0][(of3)+2][OP2HI(o1.B[(of1)+1], o2.B[(of2)+1])] , xtb[0][(of3)+3][OP2LO(o1.B[(of1)+1], o2.B[(of2)+1])] );
-    res.B[(of4)+2] = HILO(xtb[0][(of3)+4][OP2HI(o1.B[(of1)+2], o2.B[(of2)+2])] , xtb[0][(of3)+5][OP2LO(o1.B[(of1)+2], o2.B[(of2)+2])] );
-    res.B[(of4)+3] = HILO(xtb[0][(of3)+6][OP2HI(o1.B[(of1)+3], o2.B[(of2)+3])] , xtb[0][(of3)+7][OP2LO(o1.B[(of1)+3], o2.B[(of2)+3])] );
-
-	of1 = 4;
-	of2 = 4;
-	of3 = 0;
-	of4 = 4;
-    res.B[(of4)+0] = HILO(xtb[1][(of3)+0][OP2HI(o1.B[(of1)+0], o2.B[(of2)+0])] , xtb[1][(of3)+1][OP2LO(o1.B[(of1)+0], o2.B[(of2)+0])] );
-    res.B[(of4)+1] = HILO(xtb[1][(of3)+2][OP2HI(o1.B[(of1)+1], o2.B[(of2)+1])] , xtb[1][(of3)+3][OP2LO(o1.B[(of1)+1], o2.B[(of2)+1])] );
-    res.B[(of4)+2] = HILO(xtb[1][(of3)+4][OP2HI(o1.B[(of1)+2], o2.B[(of2)+2])] , xtb[1][(of3)+5][OP2LO(o1.B[(of1)+2], o2.B[(of2)+2])] );
-    res.B[(of4)+3] = HILO(xtb[1][(of3)+6][OP2HI(o1.B[(of1)+3], o2.B[(of2)+3])] , xtb[1][(of3)+7][OP2LO(o1.B[(of1)+3], o2.B[(of2)+3])] );
-
-	of1 = 8;
-	of2 = 8;
-	of3 = 0;
-	of4 = 8;
-    //res.B[(of4)+0] = HILO(xtb[2][(of3)+0][OP2HI(o1.B[(of1)+0], o2.B[(of2)+0])] , xtb[2][(of3)+1][OP2LO(o1.B[(of1)+0], o2.B[(of2)+0])] );
-    //res.B[(of4)+1] = HILO(xtb[2][(of3)+2][OP2HI(o1.B[(of1)+1], o2.B[(of2)+1])] , xtb[2][(of3)+3][OP2LO(o1.B[(of1)+1], o2.B[(of2)+1])] );
-    //res.B[(of4)+2] = HILO(xtb[2][(of3)+4][OP2HI(o1.B[(of1)+2], o2.B[(of2)+2])] , xtb[2][(of3)+5][OP2LO(o1.B[(of1)+2], o2.B[(of2)+2])] );
-    //res.B[(of4)+3] = HILO(xtb[2][(of3)+6][OP2HI(o1.B[(of1)+3], o2.B[(of2)+3])] , xtb[2][(of3)+7][OP2LO(o1.B[(of1)+3], o2.B[(of2)+3])] );
-    res.B[(of4)+0] = OP2HI(OP2HI(o1.B[(of1)+0], o2.B[(of2)+0]) , OP2LO(o1.B[(of1)+0], o2.B[(of2)+0]) );
-    res.B[(of4)+1] = OP2HI(OP2HI(o1.B[(of1)+1], o2.B[(of2)+1]) , OP2LO(o1.B[(of1)+1], o2.B[(of2)+1]) );
-    res.B[(of4)+2] = OP2HI(OP2HI(o1.B[(of1)+2], o2.B[(of2)+2]) , OP2LO(o1.B[(of1)+2], o2.B[(of2)+2]) );
-    res.B[(of4)+3] = OP2HI(OP2HI(o1.B[(of1)+3], o2.B[(of2)+3]) , OP2LO(o1.B[(of1)+3], o2.B[(of2)+3]) );
-
-	of1 = 12;
-	of2 = 12;
-	of3 = 0;
-	of4 = 12;
-    //res.B[(of4)+0] = HILO(xtb[3][(of3)+0][OP2HI(o1.B[(of1)+0], o2.B[(of2)+0])] , xtb[3][(of3)+1][OP2LO(o1.B[(of1)+0], o2.B[(of2)+0])] );
-    //res.B[(of4)+1] = HILO(xtb[3][(of3)+2][OP2HI(o1.B[(of1)+1], o2.B[(of2)+1])] , xtb[3][(of3)+3][OP2LO(o1.B[(of1)+1], o2.B[(of2)+1])] );
-    //res.B[(of4)+2] = HILO(xtb[3][(of3)+4][OP2HI(o1.B[(of1)+2], o2.B[(of2)+2])] , xtb[3][(of3)+5][OP2LO(o1.B[(of1)+2], o2.B[(of2)+2])] );
-    //res.B[(of4)+3] = HILO(xtb[3][(of3)+6][OP2HI(o1.B[(of1)+3], o2.B[(of2)+3])] , xtb[3][(of3)+7][OP2LO(o1.B[(of1)+3], o2.B[(of2)+3])] );
-    res.B[(of4)+0] = OP2HI(OP2HI(o1.B[(of1)+0], o2.B[(of2)+0]) , OP2LO(o1.B[(of1)+0], o2.B[(of2)+0]) );
-    res.B[(of4)+1] = OP2HI(OP2HI(o1.B[(of1)+1], o2.B[(of2)+1]) , OP2LO(o1.B[(of1)+1], o2.B[(of2)+1]) );
-    res.B[(of4)+2] = OP2HI(OP2HI(o1.B[(of1)+2], o2.B[(of2)+2]) , OP2LO(o1.B[(of1)+2], o2.B[(of2)+2]) );
-    res.B[(of4)+3] = OP2HI(OP2HI(o1.B[(of1)+3], o2.B[(of2)+3]) , OP2LO(o1.B[(of1)+3], o2.B[(of2)+3]) );
-#endif
-}
-#endif
-
 inline void dumpW128b(W128b& a){
 	int i;
 	for(i=0; i<16; i++){
