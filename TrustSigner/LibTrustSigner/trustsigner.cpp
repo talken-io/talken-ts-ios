@@ -230,7 +230,7 @@ static int readRecovery (unsigned char *buffer, char *file_path) {
 		memzero (wb_buffer, sizeof(wb_buffer));
 		return -1;
 	}
-	unlink (rfile_name);
+
 #if defined(__WHITEBOX__)
 	wb_buf_len = trust_signer_encrypt_fp (file_name, wb_buffer, wb_buf_len, buffer, false);
 	memzero (wb_buffer, sizeof(wb_buffer));
@@ -662,6 +662,13 @@ char *TrustSigner_getWBPublicKey(char *app_id, unsigned char *wb_data, char *coi
 #if defined(__FILES__)
 	char file_name[256] = {0};
 	sprintf (file_name, "%s/%s", file_path, PREFERENCE_WB);
+#if 1 // MYSEO : move to get public key function
+	char rfile_name[256] = {0};
+	sprintf (rfile_name, "%s/%s", file_path, RECOVERY_WB);
+	if (access (rfile_name, F_OK) != -1) {
+		unlink (rfile_name);
+	}
+#endif
 
 	memcpy (&wb_buf_len, wb_data, sizeof(wb_buf_len));
 	memcpy (wb_buffer, wb_data + sizeof(wb_buf_len), (size_t) wb_buf_len);
@@ -887,6 +894,13 @@ unsigned char *TrustSigner_getWBSignatureData(char *app_id, unsigned char *wb_da
 #if defined(__FILES__)
 	char file_name[256] = {0};
 	sprintf (file_name, "%s/%s", file_path, PREFERENCE_WB);
+#if 1 // MYSEO : move to get public key function
+	char rfile_name[256] = {0};
+	sprintf (rfile_name, "%s/%s", file_path, RECOVERY_WB);
+	if (access (rfile_name, F_OK) != -1) {
+		unlink (rfile_name);
+	}
+#endif
 
 	memcpy (&wb_buf_len, wb_data, sizeof(wb_buf_len));
 	memcpy (wb_buffer, wb_data + sizeof(wb_buf_len), (size_t) wb_buf_len);;
@@ -1105,6 +1119,13 @@ char *TrustSigner_getWBRecoveryData(char *app_id, unsigned char *wb_data, char *
 		LOGE("Error! Recovery read failed!\n");
 		return NULL;
 	}
+#if 0 // MYSEO : move to get public key function
+	char rfile_name[256] = {0};
+	sprintf (rfile_name, "%s/%s", file_path, RECOVERY_WB);
+	if (access (rfile_name, F_OK) != -1) {
+		unlink (rfile_name);
+	}
+#endif
 
 	// RECOVERY AES Decrypt ////////////////////////////////////////////////////////////////////////////
 	char recovery_aes_key[512] = {0};

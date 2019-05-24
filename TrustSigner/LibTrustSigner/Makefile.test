@@ -80,8 +80,8 @@ LIBRARY_OBJECT_FILE += $(WHITEBOX_OBJECT_FILE)
 LIBRARY_OBJECT_FILE += $(TRUSTSIGNER_OBJECT_FILE)
 
 #DEF_OS = __ANDROID__
-DEF_OS = __APPLE__
-#DEF_OS = __LINUX__
+#DEF_OS = __APPLE__
+DEF_OS = __LINUX__
 
 DEF_WRITER = __FILES__
 #DEF_WRITER = __MEMORY__
@@ -94,6 +94,8 @@ RANLIB = ranlib
 
 CXXFLAGS = -O3 -g -std=c++11 -fPIC -W -Wall -Wno-unused-parameter -frtti -fexceptions
 CFLAGS = -O3 -g -std=gnu99 -fPIC -W -Wall -Wno-unused-parameter -Wextra -Wimplicit-function-declaration -Wredundant-decls -Wstrict-prototypes -Wundef -Wshadow -Wpointer-arith -Wformat -Wreturn-type -Wsign-compare -Wmultichar -Wformat-nonliteral -Winit-self -Wuninitialized -Wformat-security
+#CXXFLAGS = -O2 -NDEBUG -std=c++11 -fPIC -W -Wall -Wno-unused-parameter -frtti -fexceptions
+#CFLAGS = -O2 -NDEBUG -std=gnu99 -fPIC -W -Wall -Wno-unused-parameter -Wextra -Wimplicit-function-declaration -Wredundant-decls -Wstrict-prototypes -Wundef -Wshadow -Wpointer-arith -Wformat -Wreturn-type -Wsign-compare -Wmultichar -Wformat-nonliteral -Winit-self -Wuninitialized -Wformat-security
 
 CXXFLAGS += -D__WHITEBOX__
 CFLAGS   += -D__WHITEBOX__

@@ -7,7 +7,7 @@
 #include "whitebox.h"
 #include "bip32_bip39.h"
 
-#define FILE_PATH "/Users/myseo/AndroidStudioProjects/Talken/TrustSigner/app/src/main/cpp"
+#define FILE_PATH "/tmp"
 
 int main (void) {
 	char *app_id = "123-456-789-012-345-678-900";
@@ -29,72 +29,78 @@ int main (void) {
 	wb_data = TrustSigner_getWBInitializeData (app_id);
 #endif
 
-	public_key = NULL;
-#if defined(__FILES__)
-	public_key = TrustSigner_getWBPublicKey (app_id, FILE_PATH, wb_data, "BTC", 5, 0, 0);
-#else
-	public_key = TrustSigner_getWBPublicKey (app_id, wb_data, "BTC", 5, 0, 0);
-#endif
-	if (public_key != NULL)
-		free (public_key);
-
-	public_key = NULL;
-#if defined(__FILES__)
-	public_key = TrustSigner_getWBPublicKey (app_id, FILE_PATH, wb_data, "ETH", 5, 0, 0);
-#else
-	public_key = TrustSigner_getWBPublicKey (app_id, wb_data, "ETH", 5, 0, 0);
-#endif
-	if (public_key != NULL)
-		free (public_key);
-
-	public_key = NULL;
-#if defined(__FILES__)
-	public_key = TrustSigner_getWBPublicKey (app_id, FILE_PATH, wb_data, "XLM", 3, 0, 0);
-#else
-	public_key = TrustSigner_getWBPublicKey (app_id, wb_data, "XLM", 3, 0, 0);
-#endif
-	if (public_key != NULL)
-		free (public_key);
-
-	unsigned char *hashMessage_btc = (unsigned char *) str2hex (message_btc, strlen(message_btc));
-	signature = NULL;
-#if defined(__FILES__)
-	signature = TrustSigner_getWBSignatureData (app_id, FILE_PATH, wb_data, "BTC", 5, 0, 0, hashMessage_btc, strlen(message_btc)/2);
-#else
-	signature = TrustSigner_getWBSignatureData (app_id, wb_data, "BTC", 5, 0, 0, hashMessage_btc, strlen(message_btc)/2);
-#endif
-	if (signature != NULL)
-		free (signature);
-
-	unsigned char *hashMessage = (unsigned char *) str2hex (message, strlen(message));
-	signature = NULL;
-#if defined(__FILES__)
-	signature = TrustSigner_getWBSignatureData (app_id, FILE_PATH, wb_data, "ETH", 5, 0, 0, hashMessage, strlen(message)/2);
-#else
-	signature = TrustSigner_getWBSignatureData (app_id, wb_data, "ETH", 5, 0, 0, hashMessage, strlen(message)/2);
-#endif
-	if (signature != NULL)
-		free (signature);
-
-	signature = NULL;
-#if defined(__FILES__)
-	signature = TrustSigner_getWBSignatureData (app_id, FILE_PATH, wb_data, "XLM", 3, 0, 0, hashMessage, strlen(message)/2);
-#else
-	signature = TrustSigner_getWBSignatureData (app_id, wb_data, "XLM", 3, 0, 0, hashMessage, strlen(message)/2);
-#endif
-	if (signature != NULL)
-		free (signature);
-
 #if defined(__FILES__)
 	TrustSigner_getWBRecoveryData(app_id, FILE_PATH, user_key, server_key);
 #else
 	TrustSigner_getWBRecoveryData(app_id, wb_data, user_key, server_key);
 #endif
 
-	if (wb_data != NULL)
-		free (wb_data);
+#if defined(__FILES__)
+	public_key = TrustSigner_getWBPublicKey (app_id, FILE_PATH, wb_data, "BTC", 5, 0, 0);
+#else
+	public_key = TrustSigner_getWBPublicKey (app_id, wb_data, "BTC", 5, 0, 0);
+#endif
+	if (public_key != NULL) {
+		free (public_key);
+		public_key = NULL;
+	}
 
-	wb_data = NULL;
+#if defined(__FILES__)
+	public_key = TrustSigner_getWBPublicKey (app_id, FILE_PATH, wb_data, "ETH", 5, 0, 0);
+#else
+	public_key = TrustSigner_getWBPublicKey (app_id, wb_data, "ETH", 5, 0, 0);
+#endif
+	if (public_key != NULL) {
+		free (public_key);
+		public_key = NULL;
+	}
+
+#if defined(__FILES__)
+	public_key = TrustSigner_getWBPublicKey (app_id, FILE_PATH, wb_data, "XLM", 3, 0, 0);
+#else
+	public_key = TrustSigner_getWBPublicKey (app_id, wb_data, "XLM", 3, 0, 0);
+#endif
+	if (public_key != NULL) {
+		free (public_key);
+		public_key = NULL;
+	}
+
+	unsigned char *hashMessage_btc = (unsigned char *) str2hex (message_btc, strlen(message_btc));
+#if defined(__FILES__)
+	signature = TrustSigner_getWBSignatureData (app_id, FILE_PATH, wb_data, "BTC", 5, 0, 0, hashMessage_btc, strlen(message_btc)/2);
+#else
+	signature = TrustSigner_getWBSignatureData (app_id, wb_data, "BTC", 5, 0, 0, hashMessage_btc, strlen(message_btc)/2);
+#endif
+	if (signature != NULL) {
+		free (signature);
+		signature = NULL;
+	}
+
+	unsigned char *hashMessage = (unsigned char *) str2hex (message, strlen(message));
+#if defined(__FILES__)
+	signature = TrustSigner_getWBSignatureData (app_id, FILE_PATH, wb_data, "ETH", 5, 0, 0, hashMessage, strlen(message)/2);
+#else
+	signature = TrustSigner_getWBSignatureData (app_id, wb_data, "ETH", 5, 0, 0, hashMessage, strlen(message)/2);
+#endif
+	if (signature != NULL) {
+		free (signature);
+		signature = NULL;
+	}
+
+#if defined(__FILES__)
+	signature = TrustSigner_getWBSignatureData (app_id, FILE_PATH, wb_data, "XLM", 3, 0, 0, hashMessage, strlen(message)/2);
+#else
+	signature = TrustSigner_getWBSignatureData (app_id, wb_data, "XLM", 3, 0, 0, hashMessage, strlen(message)/2);
+#endif
+	if (signature != NULL) {
+		free (signature);
+		signature = NULL;
+	}
+
+	if (wb_data != NULL) {
+		free (wb_data);
+		wb_data = NULL;
+	}
 #if defined(__FILES__)
 	wb_data = TrustSigner_setWBRecoveryData(app_id, FILE_PATH, user_key, recovery_data);
 #else
@@ -113,9 +119,10 @@ int main (void) {
 	if (wb_data != NULL)
 		free (wb_data);
 
-	printf ("----------------------------- ORG SEED -------------------------------\n");
-	printf ("neither way city bird steak bubble clown enjoy media palm flash give figure consider october display dragon edit razor unfold step traffic salt say\n");
-	printf ("d13b1c3c54fef76da1457676cf29341dbc4c6369f0c72dd3a63f32293206891875e153da8f7bc434d68fcb82d07e934c34a9fa427fd4edbafecea5c9da587fe6\n");
+	printf("============ ORG =================================================\n");
+	printf("Mnemonic : (160) : neither way city bird steak bubble clown enjoy media palm flash give figure consider october display dragon edit razor unfold step traffic salt say\n");
+	printf("SEED     : (064) : d13b1c3c54fef76da1457676cf29341dbc4c6369f0c72dd3a63f32293206891875e153da8f7bc434d68fcb82d07e934c34a9fa427fd4edbafecea5c9da587fe6\n");
+	printf("BTC Pub  : (111) : xpub6C6ChaNuhHShGwtK3wLm67vpa6W6STaKWhdq7RcwuLCVYaBd2oF34dFubxmQaGLyrrLYkQibuS2RMVvjrrxvh16F8AwSdxdMELKUyFmYgeA\n");
 
 	return 0;
 }
