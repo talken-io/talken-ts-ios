@@ -409,6 +409,17 @@ open class TrustSigner {
         return String(cString: recoveryData!)
     }
     
+    public func finishRecoveryData () -> Bool? {
+        if (mAppID == nil) {
+            #if DEBUG
+                print("[TrustSigner] : App ID is empty!")
+            #endif
+            return nil
+        }
+        
+        return TrustSigner_finishWBRecoveryData (pAppID, pWbPath)
+    }
+    
     public func setRecoveryData (userKey: String, recoveryData: String) -> Bool {
         if (mAppID == nil) {
             #if DEBUG

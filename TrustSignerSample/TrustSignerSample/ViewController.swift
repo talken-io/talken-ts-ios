@@ -55,6 +55,12 @@ class ViewController: UIViewController {
         
         recoveryData = mTrustSigner.getRecoveryData(userKey: userKey, serverKey: ServerKey)
         print("@@@ TrustSigner : Recovery Data = \(String(describing: recoveryData))")
+        
+        if (mTrustSigner.finishRecoveryData() == true) {
+            print("@@@ TrustSigner : Finish Recovery = TRUE")
+        } else {
+            print("@@@ TrustSigner : Finish Recovery = FALSE")
+        }
     }
     
     @IBAction func btn_Set_Recovery_Data(_ sender: Any) {

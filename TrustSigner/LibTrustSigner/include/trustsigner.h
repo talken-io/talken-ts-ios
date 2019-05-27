@@ -15,6 +15,7 @@
 #define TRUST_SINER_H
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #if defined(__cplusplus)
 extern "C" {
