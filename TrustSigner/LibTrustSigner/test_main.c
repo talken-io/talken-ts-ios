@@ -30,12 +30,6 @@ int main (void) {
 #endif
 
 #if defined(__FILES__)
-	TrustSigner_getWBRecoveryData(app_id, FILE_PATH, user_key, server_key);
-#else
-	TrustSigner_getWBRecoveryData(app_id, wb_data, user_key, server_key);
-#endif
-
-#if defined(__FILES__)
 	public_key = TrustSigner_getWBPublicKey (app_id, FILE_PATH, wb_data, "BTC", 5, 0, 0);
 #else
 	public_key = TrustSigner_getWBPublicKey (app_id, wb_data, "BTC", 5, 0, 0);
@@ -96,6 +90,16 @@ int main (void) {
 		free (signature);
 		signature = NULL;
 	}
+
+#if defined(__FILES__)
+	TrustSigner_getWBRecoveryData(app_id, FILE_PATH, user_key, server_key);
+#else
+	TrustSigner_getWBRecoveryData(app_id, wb_data, user_key, server_key);
+#endif
+
+#if defined(__FILES__)
+	TrustSigner_finishWBRecoveryData(app_id, FILE_PATH);
+#endif
 
 	if (wb_data != NULL) {
 		free (wb_data);

@@ -257,7 +257,9 @@ static int writeRecovery (unsigned char *buffer, int buffer_len, char *file_path
     memcpy (wb_buffer, buffer, buffer_len);
 #endif
 
-	unlink (rfile_name);
+	if (access (rfile_name, F_OK) != -1) {
+		unlink (rfile_name);
+	}
 	if (writeWBData (rfile_name, wb_buffer, wb_buf_len) <= 0) {
 		memzero (wb_buffer, sizeof(wb_buffer));
 		return -1;
@@ -662,13 +664,6 @@ char *TrustSigner_getWBPublicKey(char *app_id, unsigned char *wb_data, char *coi
 #if defined(__FILES__)
 	char file_name[256] = {0};
 	sprintf (file_name, "%s/%s", file_path, PREFERENCE_WB);
-#if 1 // MYSEO : move to get public key function
-	char rfile_name[256] = {0};
-	sprintf (rfile_name, "%s/%s", file_path, RECOVERY_WB);
-	if (access (rfile_name, F_OK) != -1) {
-		unlink (rfile_name);
-	}
-#endif
 
 	memcpy (&wb_buf_len, wb_data, sizeof(wb_buf_len));
 	memcpy (wb_buffer, wb_data + sizeof(wb_buf_len), (size_t) wb_buf_len);
@@ -898,7 +893,9 @@ unsigned char *TrustSigner_getWBSignatureData(char *app_id, unsigned char *wb_da
 	char rfile_name[256] = {0};
 	sprintf (rfile_name, "%s/%s", file_path, RECOVERY_WB);
 	if (access (rfile_name, F_OK) != -1) {
-		unlink (rfile_name);
+		//unlink (rfile_name);
+		LOGE("Error! Approached by an abnormal path.\n");
+		return NULL;
 	}
 #endif
 
@@ -1299,6 +1296,46 @@ char *TrustSigner_getWBRecoveryData(char *app_id, unsigned char *wb_data, char *
 
     return (recovery_data);
 }
+
+#if defined(__FILES__)
+#if defined(__ANDROID__)
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_io_talken_trustsigner_TrustSigner_finishWBRecoveryData(JNIEnv *env, jobject instance,
+		jstring appID_, jstring filePath_, jbyteArray wbData_)
+#else
+bool TrustSigner_finishWBRecoveryData(char *app_id, char *file_path)
+#endif
+{
+#if defined(__ANDROID__)
+	const char *app_id    = env->GetStringUTFChars (appID_, NULL);
+	const char *file_path = env->GetStringUTFChars (filePath_, NULL);
+	const int  app_id_len = env->GetStringUTFLength (appID_);
+#else
+	int app_id_len = strlen (app_id);
+#endif
+
+#ifdef DEBUG_TRUST_SIGNER
+	LOGD("\n[[[[[ %s ]]]]]\n", __FUNCTION__);
+#endif
+
+	if (app_id == NULL) {
+		LOGE("Error! Argument data is null!\n");
+		return false;
+	}
+
+	char rfile_name[256] = {0};
+	sprintf (rfile_name, "%s/%s", file_path, RECOVERY_WB);
+	if (access (rfile_name, F_OK) != -1) {
+		unlink (rfile_name);
+		LOGE("Recovery finish is TRUE!\n");
+		return true;
+	}
+
+	LOGE("Recovery finish is FALSE!\n");
+	return false;
+}
+#endif
 
 #if defined(__ANDROID__)
 extern "C"
