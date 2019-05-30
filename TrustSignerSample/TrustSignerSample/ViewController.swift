@@ -18,8 +18,9 @@ class ViewController: UIViewController {
     
     @IBAction func btn_Initialize_WB_Data(_ sender: Any) {
         let mTrustSigner = TrustSigner(appID: "Test")
-        if (mTrustSigner.initialize(appID: "Test") == false) {
+        if (!mTrustSigner.initialize()) {
             print("@@@ TrustSigner : Initialize failed!")
+            return
         }
     }
     
@@ -30,6 +31,10 @@ class ViewController: UIViewController {
         var sigMsg: String? = nil
         
         let mTrustSigner = TrustSigner(appID: "Test")
+        if (!mTrustSigner.initialize()) {
+            print("@@@ TrustSigner : Initialize failed!")
+            return
+        }
         
         pubKey = mTrustSigner.getAccountPublicKey(coinSymbol: "BTC")
         print("@@@ TrustSigner : BTC Pub Key = \(String(describing: pubKey))")
@@ -52,6 +57,10 @@ class ViewController: UIViewController {
         let ServerKey: String = "71db7cb1bcfa049c2878f1cf0c34fd3a3b87d68e8e6c1a7a7971bdf3b00b822a5ad846cca500ced86b94b8c37a3ac879a8994005d89ef30d9ae837344c1725b0"
         
         let mTrustSigner = TrustSigner(appID: "Test")
+        if (!mTrustSigner.initialize()) {
+            print("@@@ TrustSigner : Initialize failed!")
+            return
+        }
         
         recoveryData = mTrustSigner.getRecoveryData(userKey: userKey, serverKey: ServerKey)
         print("@@@ TrustSigner : Recovery Data = \(String(describing: recoveryData))")
@@ -69,12 +78,11 @@ class ViewController: UIViewController {
         let userKey: String = "553da97a442053022ff753cdbb7246aed6f586875ccfa855008dbb3765933f8b7d5ba430ea82dcf113dcc0bb4c3b9e2432525ac043f3e37a18db693e53671cd0"
         
         let mTrustSigner = TrustSigner(appID: "Test")
-        
         if (mTrustSigner.setRecoveryData(userKey: userKey, recoveryData: org_recoveryData) != true) {
             print("@@@ TrustSigner : Error! Recovery Failed.")
+            return
         }
         
-//        mTrustSigner = TrustSigner(appID: "Test")
         pubKey = mTrustSigner.getAccountPublicKey(coinSymbol: "BTC")
         print("@@@ TrustSigner : BTC Pub Key = \(String(describing: pubKey))")
         

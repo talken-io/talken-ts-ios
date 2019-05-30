@@ -31,7 +31,7 @@ open class TrustSigner {
         mWbPath = getApplicationDirectory().path
         if (mAppID == nil || mWbPath == nil) {
             #if DEBUG
-                print("Error! App id or path is NULL!")
+            print("Error! App id or path is NULL!")
             #endif
             return
         }
@@ -51,76 +51,8 @@ open class TrustSigner {
         pWbPath = UnsafeMutablePointer<Int8>.allocate(capacity: mWbPath!.count + 1)
         pWbPath!.initialize(repeating: 0, count: mWbPath!.count + 1)
         pWbPath!.initialize(from: mWbPath!, count: mWbPath!.count)
-
-        let strWbData: String! = getStringSharedPreference(key: PREFERENCE_WB);
-        if (strWbData == nil) {
-            #if DEBUG
-                print("@@@@@@@ TrustSigner WB Table Create @@@@@@@")
-            #endif
-            pWbData = TrustSigner_getWBInitializeData(pAppID, pWbPath);
-            if (pWbData == nil) {
-                #if DEBUG
-                    print("Error! WB initialize failed.")
-                #endif
-                if (pAppID != nil) {
-                    pAppID!.deinitialize(count: mAppID!.count + 1)
-                    pAppID?.deallocate()
-                }
-                if (pWbPath != nil) {
-                    pWbPath!.deinitialize(count: mWbPath!.count + 1)
-                    pWbPath?.deallocate()
-                }
-                if (pWbData != nil) {
-                    pWbData!.deinitialize(count: mWbData!.count + 1)
-                    pWbData?.deallocate()
-                }
-                return
-            }
-
-            let retLength: Int = getDataLength(array: Array(UnsafeBufferPointer(start: pWbData, count: 4)))
-            mWbData = Array(UnsafeBufferPointer(start: pWbData, count: retLength + 4)) // 68
-            if (putStringSharedPreference(key: PREFERENCE_WB, value: byteArrayToHexString(byteArray: mWbData!)) == false) {
-                #if DEBUG
-                    print("Error! WB secure save failed.")
-                #endif
-                if (pAppID != nil) {
-                    pAppID!.deinitialize(count: mAppID!.count + 1)
-                    pAppID?.deallocate()
-                }
-                if (pWbPath != nil) {
-                    pWbPath!.deinitialize(count: mWbPath!.count + 1)
-                    pWbPath?.deallocate()
-                }
-                if (pWbData != nil) {
-                    pWbData!.deinitialize(count: mWbData!.count + 1)
-                    pWbData?.deallocate()
-                }
-                mWbData = nil
-                return
-            }
-        } else {
-            #if DEBUG
-                print("@@@@@@@ TrustSigner WB Table Load @@@@@@@")
-            #endif
-            mWbData = hexStringToByteArray(hexString: strWbData)
-            if (pWbData != nil) {
-                if (pAppID != nil) {
-                    pAppID!.deinitialize(count: mAppID!.count + 1)
-                    pAppID?.deallocate()
-                }
-                if (pWbPath != nil) {
-                    pWbPath!.deinitialize(count: mWbPath!.count + 1)
-                    pWbPath?.deallocate()
-                }
-                if (pWbData != nil) {
-                    pWbData!.deinitialize(count: mWbData!.count + 1)
-                    pWbData?.deallocate()
-                }
-            }
-            pWbData = UnsafeMutablePointer<UInt8>.allocate(capacity: mWbData!.count + 1)
-            pWbData!.initialize(repeating: 0, count: mWbData!.count + 1)
-            pWbData!.initialize(from: mWbData!, count: mWbData!.count)
-        }
+    
+        return
     }
     
     deinit {
@@ -165,59 +97,38 @@ open class TrustSigner {
         return VERSION
     }
     
-    public func initialize (appID: String) -> Bool {
-        mAppID = String(appID)
-        mWbPath = getApplicationDirectory().path
-        if (mAppID == nil || mWbPath == nil) {
+    public func initialize () -> Bool {
+        let strWbData: String! = getStringSharedPreference(key: PREFERENCE_WB);
+        if (strWbData == nil) {
             #if DEBUG
-                print("Error! App id or path is NULL!")
+                print("@@@@@@@ TrustSigner WB Table Create @@@@@@@")
             #endif
-            return false
-        }
-        
-        if (pAppID != nil) {
-            pAppID!.deinitialize(count: mAppID!.count + 1)
-            pAppID?.deallocate()
-        }
-        pAppID = UnsafeMutablePointer<Int8>.allocate(capacity: mAppID!.count + 1)
-        pAppID!.initialize(repeating: 0, count: mAppID!.count + 1)
-        pAppID!.initialize(from: mAppID!, count: mAppID!.count)
-        
-        if (pWbPath != nil) {
-            pWbPath!.deinitialize(count: mWbPath!.count + 1)
-            pWbPath?.deallocate()
-        }
-        pWbPath = UnsafeMutablePointer<Int8>.allocate(capacity: mWbPath!.count + 1)
-        pWbPath!.initialize(repeating: 0, count: mWbPath!.count + 1)
-        pWbPath!.initialize(from: mWbPath!, count: mWbPath!.count)
-        
-        pWbData = TrustSigner_getWBInitializeData(pAppID, pWbPath);
-        if (pWbData == nil) {
-            #if DEBUG
-                print("Error! WB initialize failed.")
-            #endif
-            if (pAppID != nil) {
-                pAppID!.deinitialize(count: mAppID!.count + 1)
-                pAppID?.deallocate()
+            pWbData = TrustSigner_getWBInitializeData(pAppID, pWbPath);
+            if (pWbData == nil) {
+                #if DEBUG
+                    print("Error! WB initialize failed.")
+                #endif
+                if (pAppID != nil) {
+                    pAppID!.deinitialize(count: mAppID!.count + 1)
+                    pAppID?.deallocate()
+                }
+                if (pWbPath != nil) {
+                    pWbPath!.deinitialize(count: mWbPath!.count + 1)
+                    pWbPath?.deallocate()
+                }
+                if (pWbData != nil) {
+                    pWbData!.deinitialize(count: mWbData!.count + 1)
+                    pWbData?.deallocate()
+                }
+                return false
             }
-            if (pWbPath != nil) {
-                pWbPath!.deinitialize(count: mWbPath!.count + 1)
-                pWbPath?.deallocate()
-            }
-            if (pWbData != nil) {
-                pWbData!.deinitialize(count: mWbData!.count + 1)
-                pWbData?.deallocate()
-            }
-            return false
-        }
-        
-        let retLength: Int = getDataLength(array: Array(UnsafeBufferPointer(start: pWbData, count: 4)))
-        mWbData = Array(UnsafeBufferPointer(start: pWbData, count: retLength + 4)) // 68
-        if (putStringSharedPreference(key: PREFERENCE_WB, value: byteArrayToHexString(byteArray: mWbData!)) == false) {
-            #if DEBUG
-                print("Error! WB secure save failed.")
-            #endif
-            if (pWbData != nil) {
+            
+            let retLength: Int = getDataLength(array: Array(UnsafeBufferPointer(start: pWbData, count: 4)))
+            mWbData = Array(UnsafeBufferPointer(start: pWbData, count: retLength + 4)) // 68
+            if (putStringSharedPreference(key: PREFERENCE_WB, value: byteArrayToHexString(byteArray: mWbData!)) == false) {
+                #if DEBUG
+                    print("Error! WB secure save failed.")
+                #endif
                 if (pAppID != nil) {
                     pAppID!.deinitialize(count: mAppID!.count + 1)
                     pAppID?.deallocate()
@@ -231,8 +142,30 @@ open class TrustSigner {
                     pWbData?.deallocate()
                 }
                 mWbData = nil
+                return false
             }
-            return false
+        } else {
+            #if DEBUG
+                print("@@@@@@@ TrustSigner WB Table Load @@@@@@@")
+            #endif
+            mWbData = hexStringToByteArray(hexString: strWbData)
+            if (pWbData != nil) {
+                if (pAppID != nil) {
+                    pAppID!.deinitialize(count: mAppID!.count + 1)
+                    pAppID?.deallocate()
+                }
+                if (pWbPath != nil) {
+                    pWbPath!.deinitialize(count: mWbPath!.count + 1)
+                    pWbPath?.deallocate()
+                }
+                if (pWbData != nil) {
+                    pWbData!.deinitialize(count: mWbData!.count + 1)
+                    pWbData?.deallocate()
+                }
+            }
+            pWbData = UnsafeMutablePointer<UInt8>.allocate(capacity: mWbData!.count + 1)
+            pWbData!.initialize(repeating: 0, count: mWbData!.count + 1)
+            pWbData!.initialize(from: mWbData!, count: mWbData!.count)
         }
         return true
     }
