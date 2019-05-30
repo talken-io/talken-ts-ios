@@ -1302,7 +1302,7 @@ char *TrustSigner_getWBRecoveryData(char *app_id, unsigned char *wb_data, char *
 extern "C"
 JNIEXPORT jboolean JNICALL
 Java_io_talken_trustsigner_TrustSigner_finishWBRecoveryData(JNIEnv *env, jobject instance,
-		jstring appID_, jstring filePath_, jbyteArray wbData_)
+                                                            jstring appID_, jstring filePath_)
 #else
 bool TrustSigner_finishWBRecoveryData(char *app_id, char *file_path)
 #endif
@@ -1310,9 +1310,6 @@ bool TrustSigner_finishWBRecoveryData(char *app_id, char *file_path)
 #if defined(__ANDROID__)
 	const char *app_id    = env->GetStringUTFChars (appID_, NULL);
 	const char *file_path = env->GetStringUTFChars (filePath_, NULL);
-	const int  app_id_len = env->GetStringUTFLength (appID_);
-#else
-	int app_id_len = strlen (app_id);
 #endif
 
 #ifdef DEBUG_TRUST_SIGNER
@@ -1328,7 +1325,7 @@ bool TrustSigner_finishWBRecoveryData(char *app_id, char *file_path)
 	sprintf (rfile_name, "%s/%s", file_path, RECOVERY_WB);
 	if (access (rfile_name, F_OK) != -1) {
 		unlink (rfile_name);
-		LOGE("Recovery finish is TRUE!\n");
+		LOGD("Recovery finish is TRUE!\n");
 		return true;
 	}
 
@@ -1549,115 +1546,3 @@ unsigned char *TrustSigner_setWBRecoveryData(char *app_id, char *user_key, char 
 	return (wb_data);
 }
 
-#if defined(__ANDROID__)
-static const char *SIGN = "308201dd30820146020101300d06092a864886f70d010105050030373116301406035504030c0d416e64726f69642044656275673110300e060355040a0c07416e64726f6964310b3009060355040613025553301e170d3138313231313031353132355a170d3438313230333031353132355a30373116301406035504030c0d416e64726f69642044656275673110300e060355040a0c07416e64726f6964310b300906035504061302555330819f300d06092a864886f70d010101050003818d0030818902818100ed259fb16fcc3c21b7b5ce14f3535e221357a800438863eda3671e4a098b52b8f4e966175f84e7b87d5e24211db4f47e2bfbec25c26fb3a5934fd5595df7df495a56a25361782d64983ba7d9f9d6ef50d62f21414eb5e1fc9cd77f8f36d0306b33d55a33ce261559cdb05bb30bf8bc4bd8341a485686f3e7ba6d50a923d2478b0203010001300d06092a864886f70d01010505000381810004255f6af67200e91f8fc345f6e383f23d3e7542dba4bc63747d524a70c640a9f40de0f097c510f8cda222eafb33e5890f444d657c028e68fbb49c91ed27e15bc9c4c794ff71a26f59e28897b110e3e2ff697702f464a0bd0d19eef39b79d1659f54ecdfbb9906db93bc08b99bfe41d60df2faa6592e30e518a3849af5679c30";
-
-static jobject getApplication(JNIEnv *env) {
-	jobject application = NULL;
-	jclass activity_thread_clz = env->FindClass ("android/app/ActivityThread");
-	if (activity_thread_clz != NULL) {
-		jmethodID currentApplication = env->GetStaticMethodID (activity_thread_clz, "currentApplication", "()Landroid/app/Application;");
-		if (currentApplication != NULL) {
-			application = env->CallStaticObjectMethod (activity_thread_clz, currentApplication);
-		} else {
-#ifdef DEBUG_TRUST_SIGNER
-			LOGE("Cannot find method: currentApplication() in ActivityThread.");
-#endif
-		}
-		env->DeleteLocalRef (activity_thread_clz);
-	} else {
-#ifdef DEBUG_TRUST_SIGNER
-		LOGE("Cannot find class: android.app.ActivityThread");
-#endif
-	}
-
-	return application;
-}
-
-static int verifySign(JNIEnv *env) {
-	// Application object
-	jobject application = getApplication(env);
-	if (application == NULL) {
-		return JNI_ERR;
-	}
-	// Context(ContextWrapper) class
-	jclass context_clz = env->GetObjectClass(application);
-	// getPackageManager()
-	jmethodID getPackageManager = env->GetMethodID(context_clz, "getPackageManager", "()Landroid/content/pm/PackageManager;");
-	// android.content.pm.PackageManager object
-	jobject package_manager = env->CallObjectMethod(application, getPackageManager);
-	// PackageManager class
-	jclass package_manager_clz = env->GetObjectClass(package_manager);
-	// getPackageInfo()
-	jmethodID getPackageInfo = env->GetMethodID(package_manager_clz, "getPackageInfo", "(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;");
-	// context.getPackageName()
-	jmethodID getPackageName = env->GetMethodID(context_clz, "getPackageName", "()Ljava/lang/String;");
-	// call getPackageName() and cast from jobject to jstring
-	jstring package_name = (jstring) (env->CallObjectMethod(application, getPackageName));
-	// PackageInfo object
-	jobject package_info = env->CallObjectMethod(package_manager, getPackageInfo, package_name, 64);
-	// class PackageInfo
-	jclass package_info_clz = env->GetObjectClass(package_info);
-	// field signatures
-	jfieldID signatures_field = env->GetFieldID(package_info_clz, "signatures", "[Landroid/content/pm/Signature;");
-	jobject signatures = env->GetObjectField(package_info, signatures_field);
-	jobjectArray signatures_array = (jobjectArray) signatures;
-	jobject signature0 = env->GetObjectArrayElement(signatures_array, 0);
-	jclass signature_clz = env->GetObjectClass(signature0);
-
-	jmethodID toCharsString = env->GetMethodID(signature_clz, "toCharsString", "()Ljava/lang/String;");
-	// call toCharsString()
-	jstring signature_str = (jstring) (env->CallObjectMethod(signature0, toCharsString));
-
-	// release
-	env->DeleteLocalRef(application);
-	env->DeleteLocalRef(context_clz);
-	env->DeleteLocalRef(package_manager);
-	env->DeleteLocalRef(package_manager_clz);
-	env->DeleteLocalRef(package_name);
-	env->DeleteLocalRef(package_info);
-	env->DeleteLocalRef(package_info_clz);
-	env->DeleteLocalRef(signatures);
-	env->DeleteLocalRef(signature0);
-	env->DeleteLocalRef(signature_clz);
-
-	const char *sign = env->GetStringUTFChars(signature_str, NULL);
-	if (sign == NULL) {
-		LOGE("Error! Failed to allocate memory!");
-		return JNI_ERR;
-	}
-
-#ifdef DEBUG_TRUST_SIGNER
-    LOGD("### MYSEO : App Sign   ：%s", sign);
-    LOGD("### MYSEO : Native Sign：%s", SIGN);
-#endif
-	int result = strcmp(sign, SIGN);
-
-	// Release this memory after use
-	env->ReleaseStringUTFChars(signature_str, sign);
-	env->DeleteLocalRef(signature_str);
-	if (result == 0) {
-        LOGE("Your are bad man!");
-		return JNI_OK;
-	}
-	return JNI_ERR;
-}
-
-jint JNI_OnLoad(JavaVM *vm, void *reserved) {
-#if 0
-	JNIEnv *env = NULL;
-	if (vm->GetEnv((void **) &env, JNI_VERSION_1_4) != JNI_OK) {
-		return JNI_ERR;
-	}
-	if (verifySign(env) == JNI_OK) {
-		return JNI_VERSION_1_4;
-	}
-#ifdef DEBUG_TRUST_SIGNER
-	LOGE("Error! Oops!");
-#endif
-	return JNI_ERR;
-#else
-    return JNI_VERSION_1_4;
-#endif
-}
-#endif
