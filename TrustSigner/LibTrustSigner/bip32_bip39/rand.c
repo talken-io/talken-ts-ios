@@ -23,6 +23,7 @@
 
 #include "rand.h"
 
+
 #ifndef RAND_PLATFORM_INDEPENDENT
 
 // The following code is not supposed to be used in a production environment.
@@ -34,15 +35,48 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <sys/time.h>
+
+int microsec()
+{
+    struct timeval time;
+    gettimeofday(&time, NULL);
+    long microsec =  ( (unsigned long long)time.tv_sec * 1000000 ) + time.tv_usec;
+
+    return (int)microsec;
+}
 
 uint32_t random32(void)
 {
+
+    srand((unsigned int)microsec());
+    int i1 = rand();
+    int i2 = rand();
+    int i3 = rand();
+    int i4 = rand();
+
+    srand((unsigned)time(NULL));
+    int j1 = rand();
+    int j2 = rand();
+    int j3 = rand();
+    int j4 = rand();
+
+    int k1 = i1^j1;
+    int k2 = i2^j2;
+    int k3 = i3^j3;
+    int k4 = i4^j4;
+
+    return ((k1 & 0xFF) | ((k2 & 0xFF) << 8) | ((k3 & 0xFF) << 16) | ((uint32_t) (k4 & 0xFF) << 24));
+
+/*
 	static int initialized = 0;
 	if (!initialized) {
 		srand((unsigned)time(NULL));
 		initialized = 1;
 	}
+
 	return ((rand() & 0xFF) | ((rand() & 0xFF) << 8) | ((rand() & 0xFF) << 16) | ((uint32_t) (rand() & 0xFF) << 24));
+*/
 }
 #endif /* RAND_PLATFORM_INDEPENDENT */
 
