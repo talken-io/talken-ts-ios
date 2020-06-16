@@ -181,7 +181,31 @@ case arm :
 	}
 }
 
+4) patch tools/build/src/tools/darwin.jam
+#change from
+# - GCC 4.0 and higher in Darwin does not have -fcoalesce-templates.
+if $(real-version) < "4.0.0"
+{
+	flags darwin.compile.c++ OPTIONS $(condition) : -fcoalesce-templates ;
+}
+# - GCC 4.2 and higher in Darwin does not have -Wno-long-double.
+if $(real-version) < "4.2.0"
+{
+        flags darwin.compile OPTIONS $(condition) : -Wno-long-double ;
+}
 
-4) copy build script build.sh
+#to
+-    # - GCC 4.0 and higher in Darwin does not have -fcoalesce-templates.
+-    if $(real-version) < "4.0.0"
+-    {
+-        flags darwin.compile.c++ OPTIONS $(condition) : -fcoalesce-templates ;
+-    }
+-    # - GCC 4.2 and higher in Darwin does not have -Wno-long-double.
+-    if $(real-version) < "4.2.0"
+-    {
+-        flags darwin.compile OPTIONS $(condition) : -Wno-long-double ;
+-    }
 
-5) run build.sh
+5) copy build script build.sh
+
+6) run build.sh
