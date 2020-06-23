@@ -170,6 +170,13 @@ open class TrustSigner {
         return true
     }
     
+    public func isEmptyData() -> Bool {
+        if let strWbData = getStringSharedPreference(key: PREFERENCE_WB) {
+            return false
+        }
+        return true
+    }
+    
     public func getPublicKey (coinSymbol: String, hdDepth: Int, hdChange: Int, hdIndex: Int) -> String? {
         if (mAppID == nil) {
             #if DEBUG
