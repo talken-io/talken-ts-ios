@@ -27,9 +27,9 @@ unsigned char *TrustSigner_getWBSignatureData(char *app_id, char *file_path, uns
 char *TrustSigner_getWBRecoveryData(char *app_id, char *file_path, char *user_key, char *server_key);
 bool TrustSigner_finishWBRecoveryData(char *app_id, char *file_path);
 unsigned char *TrustSigner_setWBRecoveryData(char *app_id, char *file_path, char *user_key, char *recovery_data);
+bool TrustSigner_getWBVerify(char *app_id, char *file_path, unsigned char *wb_data, char *user_key, char *recovery_data);
 
 #if defined(__cplusplus)
 }
 #endif
-
 #endif

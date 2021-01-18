@@ -400,6 +400,41 @@ open class TrustSigner {
         return true
     }
     
+    public func verifyRecoveryData (userKey: String, recoveryData: String) -> Bool {
+        if (mAppID == nil) {
+            #if DEBUG
+            print("[TrustSigner] : App ID is empty!")
+            #endif
+            return false
+        } else if (mWbData == nil) {
+            #if DEBUG
+            print("[TrustSigner] : WB data is empty!")
+            #endif
+            return false
+        } else if userKey.isEmpty {
+            #if DEBUG
+            print("[TrustSigner] : userKey is empty!")
+            #endif
+            return false
+        } else if recoveryData.isEmpty {
+            #if DEBUG
+                print("[TrustSigner] : recoveryData is empty!")
+            #endif
+            return false
+        }
+        
+        let usrKey = UnsafeMutablePointer<Int8>.allocate(capacity: userKey.count + 1)
+        usrKey.initialize(repeating: 0, count: userKey.count + 1)
+        usrKey.initialize(from: userKey, count: userKey.count)
+        let recoveryDat = UnsafeMutablePointer<Int8>.allocate(capacity: recoveryData.count + 1)
+        recoveryDat.initialize(repeating: 0, count: recoveryData.count + 1)
+        recoveryDat.initialize(from: recoveryData, count: recoveryData.count)
+        
+        let verifyResult : Bool = TrustSigner_getWBVerify(pAppID, pWbPath, pWbData, usrKey, recoveryDat)
+        
+        return verifyResult
+    }
+    
     public func byteArrayToHexString(byteArray: Array<UInt8>) -> String {
         let hexDigits = Array("0123456789ABCDEF".utf16)
         var chars: [unichar] = []
