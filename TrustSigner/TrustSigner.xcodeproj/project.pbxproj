@@ -295,7 +295,6 @@
 		A532D0C022704499008AB4EE /* ecdsa.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecdsa.c; sourceTree = "<group>"; };
 		A532D10522705AB2008AB4EE /* SecureStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureStorage.swift; sourceTree = "<group>"; };
 		A532D10722708789008AB4EE /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
-		DA04994525B54D9F00487E37 /* TrustSignerSPM */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TrustSignerSPM; path = ../../../TrustSignerSPM; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,7 +313,6 @@
 		A532CF4822703EC9008AB4EE = {
 			isa = PBXGroup;
 			children = (
-				DA04994525B54D9F00487E37 /* TrustSignerSPM */,
 				A532CF5D22703EDD008AB4EE /* LibTrustSigner */,
 				A532CF5422703ECA008AB4EE /* TrustSigner */,
 				A532CF5322703ECA008AB4EE /* Products */,

@@ -71,7 +71,7 @@ char hexbuf[512];
 
 #if defined(__ANDROID__)
 #include <android/log.h>
-#define LOG_TAG        "### MYSEO "
+#define LOG_TAG        "### trustsigner.c ### "
 #define LOGD(...)    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #define LOGE(...)    __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 #else
@@ -375,6 +375,8 @@ static int getCoinType (char *coin) {
         coinType = COIN_TYPE_ETHEREUM;
     } else if (!strncmp (coin, "XLM", 3)) {
         coinType = COIN_TYPE_STELLAR;
+    } else if (!strncmp (coin, "FIL", 3)) {
+        coinType = COIN_TYPE_FILECOIN;
     }
     return coinType;
 }
@@ -730,6 +732,14 @@ char *TrustSigner_getWBPublicKey(char *app_id, unsigned char *wb_data, char *coi
             bip44_path[BIP44_PATH_ACCOUNT]    = (uint32_t ) hd_index | BIP44_VAL_HARDENED;
             hdnode_from_seed (seed, BIP39_KEY_STRENGTH/4, ED25519_NAME, &node);
             break;
+        case COIN_TYPE_FILECOIN:
+            bip44_path[BIP44_PATH_PURPOSE]    = BIP44_VAL_PURPOSE | BIP44_VAL_HARDENED;
+            bip44_path[BIP44_PATH_COIN_TYPE]  = BIP44_VAL_FILECOIN | BIP44_VAL_HARDENED;
+            bip44_path[BIP44_PATH_ACCOUNT]    = 0 | BIP44_VAL_HARDENED;
+            bip44_path[BIP44_PATH_CHANGE]     = (uint32_t ) hd_change;
+            bip44_path[BIP44_PATH_ADDR_INDEX] = (uint32_t ) hd_index;
+            hdnode_from_seed (seed, BIP39_KEY_STRENGTH/4, SECP256K1_NAME, &node);
+            break;
         default:
             break;
     }
@@ -784,6 +794,15 @@ char *TrustSigner_getWBPublicKey(char *app_id, unsigned char *wb_data, char *coi
             public_key_len = (int) stellar_publicAddressAsStr (node.public_key + 1, public_key, sizeof(public_key));
 #ifdef DEBUG_TRUST_SIGNER
             LOGD("----------------------------- XLM PUBLIC -----------------------------\n");
+            LOGD("(%03d) : %s\n", public_key_len, public_key);
+#endif
+            break;
+        }
+        case COIN_TYPE_FILECOIN: {
+            public_key_len = hdnode_serialize_public (&node, finger_print, VERSION_PUBLIC, public_key, sizeof(public_key));
+            public_key_len -= 1;
+#ifdef DEBUG_TRUST_SIGNER
+            LOGD("----------------------------- FIL PUBLIC -----------------------------\n");
             LOGD("(%03d) : %s\n", public_key_len, public_key);
 #endif
             break;
@@ -883,6 +902,12 @@ unsigned char *TrustSigner_getWBSignatureData(char *app_id, unsigned char *wb_da
             LOGE("Error! Hash length is incorrect!\n");
             return NULL;
         }
+    } else if (coin_type == COIN_TYPE_FILECOIN) {
+        hash_sum = 1;
+        if (hash_len > SIGN_HASH_LENGTH) {
+            LOGE("Error! Hash length is incorrect!\n");
+            return NULL;
+        }
     }
 
 #if defined(__WHITEBOX__)
@@ -965,6 +990,14 @@ unsigned char *TrustSigner_getWBSignatureData(char *app_id, unsigned char *wb_da
             bip44_path[BIP44_PATH_ACCOUNT]    = hd_index | BIP44_VAL_HARDENED;
             hdnode_from_seed (seed, BIP39_KEY_STRENGTH/4, ED25519_NAME, &node);
             break;
+        case COIN_TYPE_FILECOIN:
+            bip44_path[BIP44_PATH_PURPOSE]    = BIP44_VAL_PURPOSE | BIP44_VAL_HARDENED;
+            bip44_path[BIP44_PATH_COIN_TYPE]  = BIP44_VAL_FILECOIN | BIP44_VAL_HARDENED;
+            bip44_path[BIP44_PATH_ACCOUNT]    = 0 | BIP44_VAL_HARDENED;
+            bip44_path[BIP44_PATH_CHANGE]     = (uint32_t) hd_change;
+            bip44_path[BIP44_PATH_ADDR_INDEX] = (uint32_t) hd_index;
+            hdnode_from_seed (seed, BIP39_KEY_STRENGTH/4, SECP256K1_NAME, &node);
+            break;
         default:
             break;
     }
@@ -1020,6 +1053,19 @@ unsigned char *TrustSigner_getWBSignatureData(char *app_id, unsigned char *wb_da
             hex_print (hexbuf, (unsigned char *) hash_message, hash_len);
             LOGD("HashMessage : %s\n", hexbuf);
             hex_print (hexbuf, sign_message, (size_t) sign_len);
+            LOGD("Signature : %s\n", hexbuf);
+#endif
+            break;
+        }
+        case COIN_TYPE_FILECOIN: {
+            filecoin_hash_sign(&node, (uint8_t *) hash_message, sign_message);
+            sign_len = SIGN_SIGNATURE_LENGTH;
+            sign_len += 1; // value v
+#ifdef DEBUG_TRUST_SIGNER
+            LOGD("----------------------------- SIGNATURE FIL --------------------------\n");
+            hex_print (hexbuf, (unsigned char *) hash_message, hash_len);
+            LOGD("HashMessage : %s\n", hexbuf);
+            hex_print (hexbuf, sign_message, sign_len);
             LOGD("Signature : %s\n", hexbuf);
 #endif
             break;

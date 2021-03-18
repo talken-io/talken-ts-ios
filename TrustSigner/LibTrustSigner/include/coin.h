@@ -10,6 +10,7 @@
  * When            Who         What, Where, Why
  * 2019/01/01      myseo       create.
  * 2019/01/31      myseo       BIP44 spec added.
+ * 2021/03/05      bongkim     define value for BIP44 filecoin
  ******************************************************************************/
 
 #ifndef TRUST_SINER_COIN_H
@@ -49,6 +50,7 @@ extern "C" {
 #endif
 #define BIP44_VAL_ETHEREUM			60
 #define BIP44_VAL_STELLAR			148
+#define BIP44_VAL_FILECOIN            461
 
 #define SIGN_HASH_LENGTH			32
 #define SIGN_SIGNATURE_LENGTH		64
@@ -75,6 +77,7 @@ extern "C" {
 #define COIN_TYPE_ETHEREUM			0x1200
 #define COIN_TYPE_STELLAR			0x1300
 #define COIN_TYPE_EOS				0x1400
+#define COIN_TYPE_FILECOIN          0x1500
 
 #define COIN_TYPE_ICON				0x2100
 
@@ -108,6 +111,7 @@ void bitcoin_hash_sign(const HDNode *node, const uint8_t *hash, uint8_t *signatu
 void ethereum_message_sign(const HDNode *node, const uint8_t *message, const uint32_t message_len, uint8_t *signature, uint8_t *address);
 int ethereum_message_verify(const uint8_t *message, const uint32_t message_len, uint8_t *signature, uint8_t *address);
 void ethereum_hash_sign(const HDNode *node, const uint8_t *hash, uint8_t *signature);
+void filecoin_hash_sign(const HDNode *node, const uint8_t *hash, uint8_t *signature);
 
 size_t stellar_publicAddressAsStr(const uint8_t *bytes, char *out, size_t outlen);
 bool stellar_validateAddress(const char *str_address);

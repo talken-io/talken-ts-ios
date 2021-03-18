@@ -44,7 +44,7 @@ const CoinInfo coins[COIN_INFOR_COUNT] = {
 
 #if 0 // DEBUG
 #include "bip32_bip39.h"
-char hexbuf[256];
+char hexbuf[512];
 #endif
 
 static uint32_t ser_length(uint32_t len, uint8_t *out)
@@ -325,6 +325,22 @@ void ethereum_hash_sign(const HDNode *node, const uint8_t *hash, uint8_t *signat
 	}
 	signature[64] = 27 + v;
 }
+
+void filecoin_hash_sign(const HDNode *node, const uint8_t *hash, uint8_t *signature)
+{
+    uint8_t v = 0;
+    if (ecdsa_sign_digest(&secp256k1, node->private_key, hash, signature, &v, NULL) != 0) {
+        printf("Error! Filecoin signing failed\n");
+        return;
+    }
+
+    signature[64] = v;
+}
+#if 0
+void filecoin_public_address(const HDNode *node, char* out) {
+
+}
+#endif
 
 
 /*
