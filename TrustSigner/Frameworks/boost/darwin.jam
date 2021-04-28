@@ -491,8 +491,9 @@ rule setup-address-model ( targets * : sources * : properties * )
         {
             if $(instruction-set) {
                 options = -arch$(_)$(instruction-set) ;
-			} else if $(address-model) = 64 { # MYSEO : added
-		        options = -arch arm64 ;
+	    } else if $(address-model) = 64 { 
+                # MYSEO : added
+	       options = -arch arm64 ;
             } else {
                 options = -arch arm ;
             }

@@ -22,7 +22,7 @@ $(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 <compileflags>-DBOOST_SP_USE_SPINLOCK
 <compileflags>-std=c++11
 <compileflags>-stdlib=libc++
-<compileflags>-miphoneos-version-min=8.0
+<compileflags>-miphoneos-version-min=10.0
 <compileflags>-fvisibility=hidden
 <compileflags>-fvisibility-inlines-hidden
 <compileflags>-O2
@@ -51,7 +51,7 @@ $(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 <compileflags>-DBOOST_SP_USE_SPINLOCK
 <compileflags>-std=c++11
 <compileflags>-stdlib=libc++
-<compileflags>-miphoneos-version-min=8.0
+<compileflags>-miphoneos-version-min=10.0
 <compileflags>-fvisibility=hidden
 <compileflags>-fvisibility-inlines-hidden
 <compileflags>-O2
@@ -80,7 +80,7 @@ $(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 <compileflags>-DBOOST_SP_USE_SPINLOCK
 <compileflags>-std=c++11
 <compileflags>-stdlib=libc++
-<compileflags>-miphoneos-version-min=8.0
+<compileflags>-miphoneos-version-min=10.0
 <compileflags>-fvisibility=hidden
 <compileflags>-fvisibility-inlines-hidden
 <compileflags>-O2
@@ -110,7 +110,7 @@ $(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 <compileflags>-DBOOST_SP_USE_SPINLOCK
 <compileflags>-std=c++11
 <compileflags>-stdlib=libc++
-<compileflags>-miphoneos-version-min=8.0
+<compileflags>-miphoneos-version-min=10.0
 <compileflags>-fvisibility=hidden
 <compileflags>-fvisibility-inlines-hidden
 <compileflags>-O2
@@ -139,7 +139,7 @@ $(XCODE_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 <compileflags>-DBOOST_SP_USE_SPINLOCK
 <compileflags>-std=c++11
 <compileflags>-stdlib=libc++
-<compileflags>-miphoneos-version-min=8.0
+<compileflags>-miphoneos-version-min=10.0
 <compileflags>-fvisibility=hidden
 <compileflags>-fvisibility-inlines-hidden
 <compileflags>-O2
